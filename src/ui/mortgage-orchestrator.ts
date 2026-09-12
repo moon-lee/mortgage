@@ -209,12 +209,6 @@ export class MortgageOrchestrator extends Base {
     if (typeof HTMLElement === 'undefined') return html``;
     return html`
       <div class="shell">
-      <div class="topbar"><span class="crumb-current">Mortgage</span><span class="crumb-sep">/</span><span class="crumb-current">${this.view === 'mortgage-overview' ? 'Overview' : this.view === 'mortgage-ledger' ? 'Repayment Ledger' : this.view === 'mortgage-offsets' ? 'Offsets' : this.view === 'mortgage-rate-history' ? 'Rate History' : this.view === 'reorder-cards-modal' ? 'Reorder cards' : this.view === 'mortgage-accounts' ? 'Offset Accounts' : 'Month-end entry'}</span><div class="spacer"></div>
-        <button class="filter-btn" @click=${() => this.navigate('mortgage-overview')}>Overview</button>
-        <button class="filter-btn" @click=${() => this.navigate('mortgage-ledger')}>Ledger</button>
-        <button class="filter-btn" @click=${() => this.navigate('mortgage-offsets')}>Offsets</button>
-        <button class="filter-btn" @click=${() => this.navigate('mortgage-rate-history')}>Rates</button>
-        <button class="filter-btn" @click=${() => this.navigate('mortgage-accounts')}>Accounts</button></div>
       ${this.error ? html`<div class="view-container"><div class="view-container-inner"><p class="field-error">Error: ${this.error}</p></div></div>` : ''}
       ${this.view === 'mortgage-overview' ? html`<mortgage-overview id="child"></mortgage-overview>` : ''}
       ${this.view === 'mortgage-ledger' ? html`<mortgage-ledger id="child"></mortgage-ledger>` : ''}
