@@ -1,13 +1,13 @@
 {
   "name": "mortgage",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "type": "module",
   "main": "src/main.ts",
   "financeExtension": {
     "id": "mortgage",
     "displayName": "Mortgage",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Mortgage extension",
     "themeColor": "#000DFF",
     "activationEvents": ["onView:mortgage"],
@@ -36,7 +36,7 @@
         "offset-edit-request",
         "rate-add-request", "rate-create", "rate-edit-request", "rate-edit", "rate-form-cancel",
         "target-edit", "fy-changed", "reorder-cards", "card-order-change", "card-order-cancel",
-        "account-create", "account-edit", "account-toggle"
+        "account-create", "account-edit", "account-toggle", "monthend-delete"
       ]
     },
     "tables": [

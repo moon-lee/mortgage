@@ -91,7 +91,7 @@ export class MortgageOffsetsView extends Base {
         <div class="table-wrap matrix-scroll"><table class="hist-table">
           <thead>
             <tr><th></th><th class="num">Main Offset Balance</th><th class="num" colspan="7">Sub Offset Balance</th><th class="num">Total</th><th></th></tr>
-            <tr><th>Date</th>${this.accounts.map((a: any) => html`<th class="num">${a.account_key}<br><span style="font-weight:400;text-transform:none">${a.label}</span></th>`)}<th class="num"></th><th></th></tr>
+            <tr><th>Date</th>${this.accounts.map((a: any) => html`<th class="num" title=${a.label}>${a.account_key}</th>`)}<th class="num"></th><th></th></tr>
           </thead>
           <tbody>${ordered.map((g: any) => html`<tr>
             <td>${g.entry_date}</td>

@@ -89,6 +89,7 @@ export class MortgageOrchestrator extends Base {
     (this as any).addEventListener?.('offset-edit-request', (e: any) => { this.prefillDate = String(e?.detail?.entry_date || ''); this.returnTo = 'mortgage-offsets'; this.navigate('mortgage-month-end-form'); });
     (this as any).addEventListener?.('monthend-cancel', () => this.navigate(this.returnTo));
     (this as any).addEventListener?.('monthend-save', (e: any) => void this.onSaveMonthEnd(e?.detail));
+    (this as any).addEventListener?.('monthend-delete', (e: any) => void this.onDeleteMonth(e?.detail));
     (this as any).addEventListener?.('target-edit', (e: any) => void this.onTargetEdit(e?.detail));
     (this as any).addEventListener?.('rate-create', (e: any) => void this.onRateCreate(e?.detail));
     (this as any).addEventListener?.('rate-edit', (e: any) => void this.onRateEdit(e?.detail));
@@ -128,8 +129,18 @@ export class MortgageOrchestrator extends Base {
     }
   }
 
-  private async onTargetEdit(patch: any): Promise<void> {
+  private async onDeleteMonth(detail: any): Promise<void> {
     if (!this.finance) return;
+    try {
+      await deleteRepayment(this.finance, detail.id);
+      await this.refresh();
+    } catch (e: any) {
+      this.error = String(e?.message || e);
+      (this as any).requestUpdate?.();
+    }
+  }
+
+  private async onTargetEdit(patch: any): Promise<void> {    if (!this.finance) return;
     try {
       await updateLoan(this.finance, patch);
       await this.refresh();

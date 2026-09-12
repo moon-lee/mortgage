@@ -36,6 +36,8 @@ export class MortgageOverviewView extends Base {
     .loan-badge{display:inline-block;font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:12px;white-space:nowrap}
     .latest-tag{display:inline-block;margin-left:8px;font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--ff-accent,#007acc)}
     .order-stack{display:flex;flex-direction:column}
+    .hist-table thead th{padding:6px 8px}
+    .hist-table tbody td{padding:6px 8px}
     .muted{color:var(--ff-text-muted,#858585);font-size:var(--ff-font-sm)}
   `] as any : [];
   finance: any = null;
@@ -160,7 +162,7 @@ export class MortgageOverviewView extends Base {
           <div class="section-body">
             ${snap.entry_date ? html`
             <div class="table-wrap"><table class="hist-table">
-              <colgroup><col style="width:17%"><col style="width:15%"><col style="width:15%"><col style="width:15%"><col style="width:11%"><col style="width:13%"><col style="width:14%"></colgroup>
+              <colgroup><col style="width:18%"><col style="width:14%"><col style="width:14%"><col style="width:15%"><col style="width:10%"><col style="width:14%"><col style="width:15%"></colgroup>
               <thead><tr><th>As at</th><th class="num">Loan</th><th class="num">Offset</th><th class="num">Net loan</th><th>Rate</th><th class="num">Daily</th><th class="num">Monthly</th></tr></thead>
               <tbody><tr class="latest">
                 <td>${snap.entry_date}<span class="latest-tag">latest</span></td>

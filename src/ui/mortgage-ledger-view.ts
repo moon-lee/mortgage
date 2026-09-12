@@ -22,6 +22,8 @@ export class MortgageLedgerView extends Base {
     .hist-table td.saving{font-weight:700;color:var(--ff-accent,#007acc)}
     .section-header{padding-top:4px;padding-bottom:4px}
     .latest-tag{display:inline-block;margin-left:8px;font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--ff-accent,#007acc)}
+    .ledger-scroll{overflow-x:auto}
+    .ledger-scroll table{min-width:960px}
   `] as any : [];
   finance: any = null;
   rows: any[] = [];
@@ -63,9 +65,9 @@ export class MortgageLedgerView extends Base {
         ${this.error ? html`<p class="field-error">Error: ${this.error}</p>` : ''}
         <div class="section">
           <div class="section-header"><h3 class="section-title">Snapshots</h3><span class="section-badge">${this.rows.length} rows</span></div>
-          <div class="table-wrap"><table class="hist-table">
-            <colgroup><col style="width:13%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:15%"><col style="width:13%"><col style="width:11%"><col style="width:6%"></colgroup>
-            <thead><tr><th>Date</th><th class="num">Sched bal</th><th class="num">Actual</th><th class="num">FY interest</th><th class="num">FY offset saving</th><th class="num">Interest</th><th class="num">Extra</th><th></th></tr></thead>
+          <div class="table-wrap ledger-scroll"><table class="hist-table">
+            <colgroup><col style="width:15%"><col style="width:13%"><col style="width:14%"><col style="width:12%"><col style="width:12%"><col style="width:11%"><col style="width:11%"><col style="width:12%"></colgroup>
+            <thead><tr><th>Date</th><th class="num">Sched bal</th><th class="num">Actual</th><th class="num">FY interest</th><th class="num">FY offset</th><th class="num">Interest</th><th class="num">Extra</th><th></th></tr></thead>
             <tbody>${(() => { const ordered = [...this.rows].reverse(); return ordered.map((r: any, i: number) => {
               const newerFy = i > 0 ? ordered[i - 1].finance_year : r.finance_year;
               const olderFy = i < ordered.length - 1 ? ordered[i + 1].finance_year : r.finance_year;
@@ -77,7 +79,7 @@ export class MortgageLedgerView extends Base {
               <td class="num money">${aud(r.actual_balance)}</td><td class=${isEnd ? 'num saving' : isStart ? 'num down' : 'num'}>${aud(r.fy_interest)}</td><td class=${isEnd ? 'num saving' : isStart ? 'num down' : 'num'}>${aud(r.offset_saving_fy)}</td>
               <td class="num">${aud(r.interest_charged)}</td>
               <td class=${Number(r.extra_paid) < 0 ? 'num down' : 'num'}>${aud(r.extra_paid)}</td>
-              <td class="actions"><button class="btn-link" @click=${() => this.emit('offset-edit-request', { entry_date: r.entry_date })}>Edit</button></td>
+              <td class="actions"><button class="btn-link" @click=${() => this.emit('offset-edit-request', { entry_date: r.entry_date })}>Edit</button><button class="btn-link danger" @click=${() => { if (confirm('Delete ' + r.entry_date + ' and its offset balances?')) this.emit('monthend-delete', { id: r.id }); }}>Delete</button></td>
             </tr>`; }); })()}</tbody>
           </table></div>
         </div>

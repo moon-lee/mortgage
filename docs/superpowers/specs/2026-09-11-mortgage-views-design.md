@@ -237,7 +237,8 @@ Inside the panel, `Orchestrator.navigate(tag, mountData)` swaps the child custom
   "offset-edit-request",
   "rate-add-request", "rate-create", "rate-edit-request", "rate-edit", "rate-form-cancel",
   "target-edit", "fy-changed",
-  "reorder-cards", "card-order-change", "card-order-cancel"
+  "reorder-cards", "card-order-change", "card-order-cancel",
+  "account-create", "account-edit", "account-toggle", "monthend-delete"
 ]
 ```
 
@@ -246,8 +247,9 @@ Event → orchestrator action:
 | Event | Action |
 |---|---|
 | `monthend-add-request` | navigate to `mortgage-month-end-form` (prefilled from previous month) |
-| `monthend-save` | `saveMonthEnd()` transaction (Section 6) → navigate `mortgage-ledger` |
-| `monthend-cancel` | back to `mortgage-ledger` |
+| `monthend-save` | `saveMonthEnd()` transaction (Section 6) → back to previous view |
+| `monthend-delete` | confirm → `deleteRepayment()` (balances cascade) → refresh Ledger |
+| `monthend-cancel` | back to previous view (`returnTo`: Ledger or Offsets) |
 | `offset-edit-request` | navigate to `mortgage-month-end-form` for that date |
 | `rate-add-request` / `rate-create` / `rate-edit-request` / `rate-edit` / `rate-form-cancel` | rate form lifecycle in Rate History |
 | `target-edit` | update `mortgage_loans` targets (Overview) |
@@ -269,4 +271,4 @@ missing cards appended on load.
 - Scope: single extension design, fits one implementation plan.
 - Unambiguous: monthly uses actual days in month; rate from history lookup; only target amounts are editable, yearly figures/avg/period/dates derived; `finance_year` auto-set via `computeFinanceYear(entry_date, core.financialYear.start)`, never user-edited; FY grouping by `finance_year` equality.
 - Schema: Section 5 is copy-paste manifest JSON (5 tables, `mortgage_` prefix, sheet-cell mapping per column); `entry_date` exact-date uniqueness and all derived-only rules are service-enforced (manifest has no `unique`).
-- Navigation: Section 7 blocks are copy-paste manifest JSON (1 view, 5 commands, 5 nav items, 17 UI events); every `allowedUiEvents` entry has a mapped orchestrator action; `mountData` carries FY settings and `fy-changed` drives the Ledger filter + Overview window.
+- Navigation: Section 7 blocks are copy-paste manifest JSON (1 view, 5 commands, 5 nav items, 18 UI events); every `allowedUiEvents` entry has a mapped orchestrator action; `mountData` carries FY settings and `fy-changed` drives the Ledger filter + Overview window.

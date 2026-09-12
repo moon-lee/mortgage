@@ -34,7 +34,7 @@ Tables (5, `mortgage_` prefix): `mortgage_loans`, `mortgage_rate_history`,
 `mortgage_repayments`, `mortgage_accounts`, `mortgage_offset_balances`.
 
 Commands (4): `mortgage.show-overview/ledger/offsets/rates`.
-UI events (17): `monthend-add-request`, `monthend-save`, `monthend-cancel`,
+UI events (18): `monthend-add-request`, `monthend-save`, `monthend-cancel`, `monthend-delete`,
 `offset-edit-request`, `rate-add-request`, `rate-create`, `rate-edit-request`,
 `rate-edit`, `rate-form-cancel`, `target-edit`, `fy-changed`,
 `reorder-cards`, `card-order-change`, `card-order-cancel`,
@@ -126,7 +126,7 @@ Files:
   label "Snapshot date (normally month-end)") + repayment fields + 8-offset grid with live totals,
   Save → `monthend-save`, Cancel → `monthend-cancel`. Prefill balances from previous month.
 - `src/ui/mortgage-orchestrator.ts` (`mortgage-orchestrator`) — owns `finance` + `mountData`
-  (`financialYearStart/Current/Filter`), `navigate(tag)`, listens to all 17 events, calls service,
+  (`financialYearStart/Current/Filter`), `navigate(tag)`, listens to all 18 events, calls service,
   surfaces errors as red `Error: ...` in view (template pattern).
 - `src/ui/index.ts` — register all 6 tags, guarded.
 - `src/ui/mortgage-view.ts` — keep as legacy alias re-exporting orchestrator default
@@ -170,7 +170,7 @@ Build + real DB: `npm run build` → `build/extension/mortgage.js` <200KB →
 
 - [ ] `finance` only `import type`; `finance-logger` via `src/vendor/logger.ts`, no `console.log` shipped.
 - [ ] No top-level `HTMLElement`/`window`/`customElements` in `main.ts`/dao/services.
-- [ ] All 5 commands in `allowedCommands`, all 17 events in `allowedUiEvents`.
+- [ ] All 5 commands in `allowedCommands`, all 18 events in `allowedUiEvents`.
 - [ ] `extra_paid` has no `min` (negatives allowed); all other money `min: 0`.
 - [ ] `entry_date` future rejected; exact-date duplicates rejected; `finance_year` never a form field.
 - [ ] `total_paid == base_amount + fee` audit check present.
