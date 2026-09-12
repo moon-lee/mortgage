@@ -31,7 +31,8 @@ export class MortgageOrchestrator extends Base {
   async init(f: any, mount: Record<string, unknown> = {}): Promise<void> {
     this.finance = f;
     this.mountData = mount;
-    const v = mount.viewId as string | undefined;
+    // Target child arrives as mount.view (single-panel mounts) or legacy mount.viewId (dev dropdown).
+    const v = (mount.view ?? mount.viewId) as string | undefined;
     if (v === 'mortgage' || v === 'mortgage-overview' || v === undefined) this.view = 'mortgage-overview';
     else if (v === 'mortgage-ledger') this.view = 'mortgage-ledger';
     else if (v === 'mortgage-offsets') this.view = 'mortgage-offsets';
@@ -85,7 +86,7 @@ export class MortgageOrchestrator extends Base {
 
   override connectedCallback(): void {
     super.connectedCallback?.();
-    (this as any).addEventListener?.('monthend-add-request', () => { this.prefillDate = ''; this.returnTo = 'mortgage-ledger'; this.navigate('mortgage-month-end-form'); });
+    (this as any).addEventListener?.('monthend-add-request', (e: any) => { this.prefillDate = ''; this.returnTo = e?.detail?.source === 'mortgage-overview' ? 'mortgage-overview' : 'mortgage-ledger'; this.navigate('mortgage-month-end-form'); });
     (this as any).addEventListener?.('offset-edit-request', (e: any) => { this.prefillDate = String(e?.detail?.entry_date || ''); this.returnTo = 'mortgage-offsets'; this.navigate('mortgage-month-end-form'); });
     (this as any).addEventListener?.('monthend-cancel', () => this.navigate(this.returnTo));
     (this as any).addEventListener?.('monthend-save', (e: any) => void this.onSaveMonthEnd(e?.detail));

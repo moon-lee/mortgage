@@ -59,7 +59,7 @@ export class MortgageLedgerView extends Base {
           <option value="">All FYs</option>
           ${[...new Set(this.rows.map((r: any) => r.finance_year))].map((f: string) => html`<option value=${f} ?selected=${this.fy === f}>${f}</option>`)}
         </select>
-        <button class="filter-btn" @click=${() => this.emit('monthend-add-request')}>Add month-end entry</button></div>
+        <button class="filter-btn" @click=${() => this.emit('monthend-add-request', { source: 'mortgage-ledger' })}>Add month-end entry</button></div>
       <div class="view-container"><div class="view-container-inner">
         <h1>Repayment Ledger</h1>
         ${this.error ? html`<p class="field-error">Error: ${this.error}</p>` : ''}

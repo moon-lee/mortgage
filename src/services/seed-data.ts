@@ -1,7 +1,7 @@
 // AUTO-GENERATED from docs/Tax Brackets_2025_2026.xlsx (Mortgage). Do not hand-edit.
 // Loan: A1:C9 (C1/C2/C3/C4/C7). Rates: E1:F8 (effective_to chained).
 // Repayments: rows 33-47 cols A-L. Offsets: rows 33-47 cols M-T.
-export const SEED_VERSION = 1;
+export const SEED_VERSION = 2;
 
 export interface SeedRepayment {
   entry_date: string; finance_year: string;
@@ -141,4 +141,25 @@ export const SEED_REPAYMENTS: ReadonlyArray<SeedRepayment> = [
     interest_charged: 2472.05, base_amount: 3899.36, fee: 8,
     total_paid: 3907.36, extra_paid: 292.64,
     offsets: { '0390': 52506.07, '3564': 257.62, '5272': 27600, '3545': 1880, '9722': 1000, '8107': 4850, '4323': 1300, '0743': 1200 } },
+  { entry_date: '2026-06-30', finance_year: '2025-2026',
+    scheduled_balance: 610731.73, actual_balance: 602168.12,
+    fy_interest: 29892.76, offset_saving_fy: 4732.38,
+    actual_repayment: 1430.18, scheduled_payment: 1137.54,
+    interest_charged: 2761.82, base_amount: 3899.36, fee: 8,
+    total_paid: 3907.36, extra_paid: 292.64,
+    offsets: { '0390': 54226.07, '3564': 241.56, '5272': 28850, '3545': 1980, '9722': 1000, '8107': 5100, '4323': 150, '0743': 1200 } },
+  { entry_date: '2026-07-31', finance_year: '2026-2027',
+    scheduled_balance: 609482.76, actual_balance: 600626.51,
+    fy_interest: 2650.39, offset_saving_fy: 488.06,
+    actual_repayment: 1541.61, scheduled_payment: 1248.97,
+    interest_charged: 2650.39, base_amount: 3899.36, fee: 8,
+    total_paid: 3907.36, extra_paid: 292.64,
+    offsets: { '0390': 56672.49, '3564': 576.33, '5272': 29850, '3545': 2060, '9722': 1040, '8107': 5300, '4323': 350, '0743': 1210 } },
+  { entry_date: '2026-08-31', finance_year: '2026-2027',
+    scheduled_balance: 608196.03, actual_balance: 599047.14,
+    fy_interest: 5259.02, offset_saving_fy: 1027.1,
+    actual_repayment: 1579.37, scheduled_payment: 1286.73,
+    interest_charged: 2608.63, base_amount: 3895.36, fee: 12,
+    total_paid: 3907.36, extra_paid: 292.64,
+    offsets: { '0390': 55998.4, '3564': 689.77, '5272': 31100, '3545': 2160, '9722': 1248, '8107': 5550, '4323': 753, '0743': 1260 } },
 ];

@@ -36,7 +36,9 @@ function openView(tag: string): ( ) => Promise<void> {
   return async () => {
     if (!_finance) return;
     const mountData = await readMountData(_finance);
-    await _finance.ui?.requestMount(tag, { viewId: tag, ...mountData });
+    // Single panel identity ('mortgage' → tab always "Mortgage"); target child rides in mountData.view.
+    // Retargets of the open panel arrive as DOM 'mount-update' (see panel branch below).
+    await _finance.ui?.requestMount('mortgage', { view: tag, ...mountData });
   };
 }
 
@@ -67,15 +69,21 @@ export async function activate(finance: FinanceApi, ctx: { viewId?: string } & R
       const el = document.createElement('mortgage-orchestrator') as any;
       app.innerHTML = '';
       app.appendChild(el);
-      const mountData = { viewId: ctx.viewId, ...(ctx as Record<string, unknown>) };
-      queueMicrotask(() => {
-        if (typeof el.init === 'function') void el.init(finance, mountData);
+      const baseData = { viewId: ctx.viewId, ...(ctx as Record<string, unknown>) };
+      const mountEl = () => {
+        if (typeof el.init === 'function') void el.init(finance, baseData);
         else if (typeof el.setFinance === 'function') void el.setFinance(finance);
         else el.finance = finance;
-      });
+      };
+      queueMicrotask(mountEl);
       setTimeout(() => {
         if (el.finance == null && typeof el.setFinance === 'function') void el.setFinance(finance);
       }, 50);
+      // Retargets to the open panel (sidebar nav while mounted) arrive here from panel-bootstrap.
+      app.addEventListener('mount-update', (e: Event) => {
+        const detail = (e as CustomEvent).detail as Record<string, unknown>;
+        if (typeof el.init === 'function') void el.init(finance, { ...baseData, ...(detail ?? {}) });
+      });
     }
   }
 }

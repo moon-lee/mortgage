@@ -158,8 +158,10 @@ export async function getTargetEstimates(finance: any): Promise<{ target_offset:
   const seriesTotal: number[] = [];
   for (const r of rows) {
     const bals = await listBalancesForRepayment(finance, r.id);
-    series0390.push(Number(bals.find((b) => key0390 && b.account_id === key0390.id)?.balance || 0));
-    seriesTotal.push(bals.reduce((s, b) => s + Number(b.balance || 0), 0));
+    const main = Number(bals.find((b) => key0390 && b.account_id === key0390.id)?.balance || 0);
+    const total = bals.reduce((s, b) => s + Number(b.balance || 0), 0);
+    series0390.push(main);
+    seriesTotal.push(total - main);
   }
   const first0390 = series0390.length ? series0390[0] : 0;
   const last0390 = series0390.length ? series0390[series0390.length - 1] : 0;
@@ -214,7 +216,7 @@ export async function getPaceHistory(finance: any): Promise<PacePoint[]> {
   for (const r of rows) {
     const bals = await listBalancesForRepayment(finance, r.id);
     const main = Number(bals.find((b) => key0390 && b.account_id === key0390.id)?.balance || 0);
-    const sub = bals.reduce((s, b) => s + Number(b.balance || 0), 0);
+    const sub = bals.reduce((s, b) => s + Number(b.balance || 0), 0) - main;
     sMain.push(main);
     sSub.push(sub);
     const i = sMain.length - 1;

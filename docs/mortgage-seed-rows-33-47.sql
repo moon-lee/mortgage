@@ -184,4 +184,36 @@ INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES 
 INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-05-29'), (SELECT id FROM mortgage_accounts WHERE account_key = '4323'), 1300);
 INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-05-29'), (SELECT id FROM mortgage_accounts WHERE account_key = '0743'), 1200);
 
+-- 6. Jun–Aug 2026 top-up (user-supplied, verified against sheet formulas 2026-09-12)
+INSERT INTO mortgage_repayments (entry_date, finance_year, scheduled_balance, actual_balance, fy_interest, offset_saving_fy, actual_repayment, scheduled_payment, interest_charged, base_amount, fee, total_paid, extra_paid)
+VALUES ('2026-06-30', '2025-2026', 610731.73, 602168.12, 29892.76, 4732.38, 1430.18, 1137.54, 2761.82, 3899.36, 8, 3907.36, 292.64); -- SubTotal=38521.56 Total=92747.63
+INSERT INTO mortgage_repayments (entry_date, finance_year, scheduled_balance, actual_balance, fy_interest, offset_saving_fy, actual_repayment, scheduled_payment, interest_charged, base_amount, fee, total_paid, extra_paid)
+VALUES ('2026-07-31', '2026-2027', 609482.76, 600626.51, 2650.39, 488.06, 1541.61, 1248.97, 2650.39, 3899.36, 8, 3907.36, 292.64); -- SubTotal=40386.33 Total=97058.82
+INSERT INTO mortgage_repayments (entry_date, finance_year, scheduled_balance, actual_balance, fy_interest, offset_saving_fy, actual_repayment, scheduled_payment, interest_charged, base_amount, fee, total_paid, extra_paid)
+VALUES ('2026-08-31', '2026-2027', 608196.03, 599047.14, 5259.02, 1027.1, 1579.37, 1286.73, 2608.63, 3895.36, 12, 3907.36, 292.64); -- SubTotal=42760.77 Total=98759.17
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '0390'), 54226.07);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '3564'), 241.56);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '5272'), 28850);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '3545'), 1980);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '9722'), 1000);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '8107'), 5100);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '4323'), 150);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-06-30'), (SELECT id FROM mortgage_accounts WHERE account_key = '0743'), 1200);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '0390'), 56672.49);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '3564'), 576.33);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '5272'), 29850);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '3545'), 2060);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '9722'), 1040);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '8107'), 5300);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '4323'), 350);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-07-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '0743'), 1210);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '0390'), 55998.4);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '3564'), 689.77);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '5272'), 31100);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '3545'), 2160);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '9722'), 1248);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '8107'), 5550);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '4323'), 753);
+INSERT INTO mortgage_offset_balances (repayment_id, account_id, balance) VALUES ((SELECT id FROM mortgage_repayments WHERE entry_date = '2026-08-31'), (SELECT id FROM mortgage_accounts WHERE account_key = '0743'), 1260);
+
 COMMIT;

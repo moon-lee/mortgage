@@ -133,7 +133,7 @@ export class MortgageOverviewView extends Base {
       <div class="view-scroll">
       <div class="topbar"><span class="crumb-current">Mortgage · Overview</span><div class="spacer"></div>
         <button class="filter-btn" @click=${() => this.emit('reorder-cards')}>⇅ Cards</button>
-        <button class="filter-btn" @click=${() => this.emit('monthend-add-request')}>Add month-end entry</button></div>
+        <button class="filter-btn" @click=${() => this.emit('monthend-add-request', { source: 'mortgage-overview' })}>Add month-end entry</button></div>
       <div class="view-container"><div class="view-container-inner order-stack">
         ${this.error ? html`<div class="section"><div class="section-body"><p class="field-error">Error: ${this.error}</p></div></div>` : ''}
         <div class="section" style="order:${this.cardIndex('loan')}">
