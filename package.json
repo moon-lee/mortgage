@@ -9,7 +9,7 @@
     "displayName": "Mortgage",
     "version": "0.1.7",
     "description": "Mortgage extension",
-    "themeColor": "#000DFF",
+    "themeColor": "#4CAF50",
     "activationEvents": ["onView:mortgage"],
     "contributions": {
       "views": [{ "id": "mortgage", "name": "Mortgage", "icon": "assets/icon.svg" }],

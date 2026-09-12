@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Extension family colors</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#111;color:#eee;padding:28px;margin:0}
+h1{font-size:20px} p.dim{font-size:12px;opacity:.6}
+.fam{margin:22px 0}
+.fam h2{font-size:15px;margin:0 0 8px}
+.fam h2 small{font-weight:400;opacity:.6}
+.mockbar{display:flex;gap:14px;background:#252526;border:1px solid #444;border-radius:12px;padding:16px 18px;align-items:flex-start;flex-wrap:wrap}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:76px}
+.icon{width:46px;height:46px;border-radius:11px;background:#1e1e1e;display:grid;place-items:center}
+.icon svg{width:30px;height:30px}
+.cell b{font-size:11px;font-weight:600}
+.cell code{font-size:11px;background:#00000055;padding:1px 7px;border-radius:5px}
+.cell .btn{border:0;border-radius:5px;padding:5px 12px;color:#fff;font-size:11px;cursor:pointer}
+.panels{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+.panel{flex:1;min-width:200px;border-radius:10px;padding:12px 14px;font-size:12px;border:1px solid #444}
+.panel.dark{background:#1e1e1e;color:#d4d4d4}
+.panel.light{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+.panel .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 9px;border-radius:10px;border:1px solid;margin-left:8px}
+</style></head>
+<body>
+<h1>Extension family colors — 10 extensions, big mock sidebars</h1>
+<p class="dim">Double-click to open. Pick a family + mortgage hex; I apply it and delete this file.</p>
+<div id="fams"></div>
+<script>
+const house = c => `<svg viewBox="0 0 24 24"><path d="M12 5.4 6.2 10.2h1.7v6h8.2v-6H17.8Z" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/><rect x="9" y="12.4" width="1.8" height="2" rx="0.4" fill="${c}"/><rect x="11.1" y="11.2" width="1.8" height="3.2" rx="0.4" fill="${c}"/><rect x="13.2" y="9.8" width="1.8" height="4.6" rx="0.4" fill="${c}"/></svg>`;
+const NAMES = ['mortgage','salary','budget','dashboard','todo','bills','savings','invest','super','tax'];
+const FAMS = [
+  ['Material 2 · 500s <small>classic bright</small>', ['#4CAF50','#2196F3','#FF9800','#9C27B0','#F44336','#00BCD4','#8BC34A','#3F51B5','#795548','#E91E63']],
+  ['Material 2 · 700s <small>deeper, pro</small>', ['#388E3C','#1976D2','#F57C00','#7B1FA2','#D32F2F','#0097A7','#689F38','#303F9F','#5D4037','#C2185B']],
+  ['Google Workspace <small>product tones</small>', ['#1E8E3E','#1A73E8','#E37400','#9334E6','#D93025','#12A5AF','#5F6368','#9334E6','#B06000','#D01884']],
+  ['Material 3 · expressive <small>modern vivid</small>', ['#146C2E','#0B57D0','#B76A00','#6750A4','#B3261E','#018786','#4C662B','#7C4DBE','#965A00','#D81B60']],
+  ['Material 3 · tonal dark <small>tone-80 on dark UI</small>', ['#7FF7A8','#A8C7FA','#F8C56E','#D0BCFF','#F2B8B5','#7CD8E0','#B1D18A','#BAC3FF','#D7C9B8','#F5B7C4']],
+];
+document.getElementById('fams').innerHTML = FAMS.map(([n,cs]) => `
+<div class="fam"><h2>${n} <small>${cs[0]} = mortgage</small></h2>
+<div class="mockbar">${cs.map((c,i) => `
+<div class="cell"><div class="icon">${house(c)}</div><b>${NAMES[i]}</b><code>${c}</code>
+<button class="btn" style="background:${c}">Action</button></div>`).join('')}</div>
+<div class="panels">
+<div class="panel dark">Rate @ 6.19% <span class="tag" style="color:${cs[0]};border-color:${cs[0]}">pill</span> · Save loan <span class="tag" style="background:${cs[0]};border-color:${cs[0]};color:#fff">btn</span></div>
+<div class="panel light">Rate @ 6.19% <span class="tag" style="color:${cs[0]};border-color:${cs[0]}">pill</span> · Save loan <span class="tag" style="background:${cs[0]};border-color:${cs[0]};color:#fff">btn</span></div>
+</div></div>`).join('');
+</script>
+</body></html>
