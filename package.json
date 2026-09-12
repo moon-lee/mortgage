@@ -1,0 +1,37 @@
+{
+  "name": "mortgage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/main.ts",
+  "financeExtension": {
+    "id": "mortgage",
+    "displayName": "Mortgage",
+    "version": "0.1.0",
+    "description": "Mortgage extension",
+    "themeColor": "#6366F1",
+    "activationEvents": ["onView:mortgage"],
+    "contributions": {
+      "views": [{ "id": "mortgage", "name": "Mortgage", "icon": "assets/icon.svg" }],
+      "commands": [{ "id": "mortgage.hello", "title": "Mortgage: Hello" }],
+      "navigation": [{ "id": "mortgage-main", "label": "Mortgage", "command": "mortgage.hello", "group": "Mortgage" }],
+      "configuration": [
+        { "key": "mortgage.themeColor", "type": "string", "label": "Accent color for icons, topbar actions, and in-view highlights (hex).", "default": "#6366F1", "pattern": "^#[0-9A-Fa-f]{6}$", "formatHint": "#RRGGBB", "placeholder": "#6366F1" }
+      ],
+      "allowedCommands": ["mortgage.hello"],
+      "allowedUiEvents": []
+    },
+    "main": "src/main.ts"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "node D:/finance_flow_ai/scripts/sdk/cli.mjs build ."
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "lit": "^3.1.0"
+  }
+}
