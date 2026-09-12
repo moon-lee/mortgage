@@ -20,6 +20,7 @@ export class MortgageLedgerView extends Base {
     .hist-table td.money{font-weight:700;color:var(--ff-text-strong,#fff)}
     .hist-table td.down{font-weight:700;color:var(--ff-warning-text,#ffd866)}
     .hist-table td.saving{font-weight:700;color:var(--ff-accent,#007acc)}
+    .section-header{padding-top:4px;padding-bottom:4px}
     .latest-tag{display:inline-block;margin-left:8px;font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--ff-accent,#007acc)}
   `] as any : [];
   finance: any = null;

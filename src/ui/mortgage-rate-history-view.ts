@@ -15,6 +15,7 @@ export class MortgageRateHistoryView extends Base {
     .hist-table td.num{text-align:right;font-variant-numeric:tabular-nums}
     .hist-table td.money{font-weight:700;color:var(--ff-text-strong,#fff)}
     .muted{color:var(--ff-text-muted,#858585);font-size:var(--ff-font-sm)}
+    .section-header{padding-top:4px;padding-bottom:4px}
   `] as any : [];
   finance: any = null;
   rows: any[] = [];

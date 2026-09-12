@@ -34,6 +34,7 @@ export class MortgageMonthEndForm extends Base {
     .derived-table tr:last-child td{border-bottom:none}
     .derived-table td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
     .header-actions{display:flex;align-items:center;gap:8px}
+    .section-header{padding-top:4px;padding-bottom:4px}
     .code-in{display:inline-block;font-size:var(--ff-font-sm);font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:9px;padding:0 7px;white-space:nowrap}
     .code-out{display:inline-block;font-size:var(--ff-font-sm);font-weight:800;letter-spacing:.3px;color:var(--ff-teal,#4ec9b0);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-teal,#4ec9b0);border-radius:9px;padding:0 7px;white-space:nowrap}
     .two-col{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}

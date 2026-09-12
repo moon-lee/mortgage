@@ -15,6 +15,10 @@ export class MortgageOverviewView extends Base {
     .stat-label{font-size:var(--ff-font-sm);font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--ff-text-muted,#858585);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .stat-value{font-size:var(--ff-font-xl);font-weight:600;color:var(--ff-text-strong,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .header-actions{display:flex;align-items:center;gap:8px}
+    .section-header{min-height:42px;padding-top:4px;padding-bottom:4px}
+    .header-actions .btn{padding:2px 12px;font-size:var(--ff-font-sm)}
+    .section-badge{font-size:var(--ff-font-xs,11px);padding:0 8px}
+    .loan-badge,.rate-badge{font-size:var(--ff-font-sm);padding:1px 10px}
     .hist-table{width:100%;border-collapse:collapse;table-layout:fixed}
     .hist-table thead th{font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ff-text-muted,#858585);text-align:left;padding:8px 10px;border-bottom:1px solid var(--ff-border,#3e3e3e)}
     .hist-table thead th.num{text-align:right}
@@ -28,8 +32,8 @@ export class MortgageOverviewView extends Base {
     .hist-table td.saving{font-weight:700;color:var(--ff-accent,#007acc)}
     .hist-table td.down{font-weight:700;color:var(--ff-warning-text,#ffd866)}
     .rate-pill{display:inline-block;background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);color:var(--ff-accent,#007acc);border-radius:10px;padding:1px 9px;font-size:var(--ff-font-sm);font-weight:700;white-space:nowrap}
-    .rate-badge{display:inline-block;font-size:var(--ff-font-base);font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:12px;padding:3px 12px;white-space:nowrap}
-    .loan-badge{display:inline-block;font-size:var(--ff-font-base);font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:12px;padding:3px 12px;white-space:nowrap}
+    .rate-badge{display:inline-block;font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:12px;white-space:nowrap}
+    .loan-badge{display:inline-block;font-weight:800;letter-spacing:.3px;color:var(--ff-accent,#007acc);background:var(--ff-bg-input,#3c3c3c);border:1px solid var(--ff-accent,#007acc);border-radius:12px;white-space:nowrap}
     .latest-tag{display:inline-block;margin-left:8px;font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--ff-accent,#007acc)}
     .order-stack{display:flex;flex-direction:column}
     .muted{color:var(--ff-text-muted,#858585);font-size:var(--ff-font-sm)}

@@ -16,6 +16,7 @@ export class MortgageAccountsView extends Base {
     .hist-table tr.inactive td{opacity:.55}
     .status-on{font-weight:700;color:var(--ff-teal,#4ec9b0)}
     .status-off{font-weight:700;color:var(--ff-text-muted,#858585)}
+    .section-header{padding-top:4px;padding-bottom:4px}
   `] as any : [];
   finance: any = null;
   rows: any[] = [];

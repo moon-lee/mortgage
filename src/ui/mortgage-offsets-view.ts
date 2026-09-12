@@ -22,6 +22,7 @@ export class MortgageOffsetsView extends Base {
     .hist-table td.money{font-weight:700;color:var(--ff-text-strong,#fff)}
     .hist-table td.saving{font-weight:700;color:var(--ff-accent,#007acc)}
     .latest-tag{display:inline-block;margin-left:8px;font-size:var(--ff-font-sm);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--ff-accent,#007acc)}
+    .section-header{padding-top:4px;padding-bottom:4px}
     .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media (max-width:640px){.stat-grid{grid-template-columns:1fr}}
     .stat{background:var(--ff-bg-subpanel,#2a2a2a);border:1px solid var(--ff-border,#3e3e3e);border-radius:6px;padding:12px 14px;min-width:0}
