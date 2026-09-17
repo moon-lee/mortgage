@@ -268,8 +268,7 @@ export class MortgageOverviewView extends Base {
       let savedAmount = 50000;
       try {
         const raw = await this.finance.settings.get('mortgage.flexTarget');
-        const parsed =
-          typeof raw === 'string' ? JSON.parse(raw) : (raw as any);
+        const parsed = typeof raw === 'string' ? JSON.parse(raw) : (raw as any);
         if (parsed && typeof parsed.account_key === 'string')
           savedKey = parsed.account_key;
         if (parsed && Number.isFinite(Number(parsed.amount)))
@@ -825,8 +824,10 @@ export class MortgageOverviewView extends Base {
                                       (a) => html`
                                         <option
                                           value=${a.account_key}
-                                          ?selected=${a.account_key ===
-                                          this.flexAccountKey}
+                                          ?selected=${
+                                            a.account_key ===
+                                            this.flexAccountKey
+                                          }
                                         >
                                           ${a.label} ${a.account_key}
                                         </option>
@@ -882,8 +883,7 @@ export class MortgageOverviewView extends Base {
                                   ${aud(t.trail_avg_subtotal ?? 0)}/mo
                                 </td>
                                 <td class="num">
-                                  ${f?.date ?? ''} ·
-                                  ${aud(f?.trailAvg ?? 0)}/mo
+                                  ${f?.date ?? ''} · ${aud(f?.trailAvg ?? 0)}/mo
                                 </td>
                               </tr>
                             </tbody>

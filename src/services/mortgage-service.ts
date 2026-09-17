@@ -132,13 +132,11 @@ export async function saveMonthEnd(
   const repaymentId = res.id as number;
   try {
     for (const b of balances) {
-      await finance.db
-        .table('mortgage_offset_balances')
-        .insert({
-          repayment_id: repaymentId,
-          account_id: b.account_id,
-          balance: b.balance,
-        });
+      await finance.db.table('mortgage_offset_balances').insert({
+        repayment_id: repaymentId,
+        account_id: b.account_id,
+        balance: b.balance,
+      });
     }
   } catch (e) {
     await finance.db
@@ -150,9 +148,7 @@ export async function saveMonthEnd(
   return { repayment_id: repaymentId };
 }
 
-export async function getSnapshot(
-  finance: any,
-): Promise<{
+export async function getSnapshot(finance: any): Promise<{
   entry_date: string | null;
   loan: number;
   offset_total: number;
@@ -190,9 +186,7 @@ export async function getSnapshot(
  * Cross-extension summary (domain service `summary`): current loan balance,
  * offset balance and net loan in one call. Pure read, latest snapshot wins.
  */
-export async function getSummary(
-  finance: any,
-): Promise<{
+export async function getSummary(finance: any): Promise<{
   entry_date: string | null;
   loan_balance: number;
   offset_balance: number;
@@ -207,9 +201,7 @@ export async function getSummary(
   };
 }
 
-export async function getSnapshotHistory(
-  finance: any,
-): Promise<
+export async function getSnapshotHistory(finance: any): Promise<
   Array<{
     entry_date: string;
     loan: number;
@@ -285,9 +277,7 @@ export async function getYearly(
   return out;
 }
 
-export async function getTargetEstimates(
-  finance: any,
-): Promise<{
+export async function getTargetEstimates(finance: any): Promise<{
   target_offset: number;
   target_subtotal: number;
   avg_offset: number;
