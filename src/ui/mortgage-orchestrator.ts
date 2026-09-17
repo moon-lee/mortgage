@@ -239,7 +239,43 @@ export class MortgageOrchestrator extends Base {
   private async onTargetEdit(patch: any): Promise<void> {
     if (!this.finance) return;
     try {
-      await updateLoan(this.finance, patch);
+      const { target_amount_flex, flex_account_key, ...loanPatch } =
+        patch ?? {};
+      if (Object.keys(loanPatch).length)
+        await updateLoan(this.finance, loanPatch);
+      if (target_amount_flex !== undefined || flex_account_key !== undefined) {
+        let current: Record<string, unknown> = {};
+        try {
+          const raw = await this.finance.settings.get('mortgage.flexTarget');
+          current =
+            ((typeof raw === 'string' ? JSON.parse(raw) : raw) as Record<
+              string,
+              unknown
+            >) ?? {};
+        } catch {
+          /* overwrite with incoming values */
+        }
+        const next = {
+          account_key: (flex_account_key as string) ?? '',
+          amount: target_amount_flex as number,
+        };
+        if (!next.account_key && typeof current.account_key === 'string')
+          next.account_key = current.account_key;
+        if (
+          (next.amount === undefined || next.amount === null) &&
+          typeof current.amount !== 'undefined'
+        )
+          next.amount = current.amount as number;
+        if (!Number.isFinite(Number(next.amount)) || Number(next.amount) < 0)
+          throw new Error('ValidationFailed: flex target must be >= 0');
+        await this.finance.settings.set(
+          'mortgage.flexTarget',
+          JSON.stringify({
+            account_key: next.account_key,
+            amount: Number(next.amount),
+          }),
+        );
+      }
       await this.refresh();
     } catch (e: any) {
       this.error = String(e?.message || e);
