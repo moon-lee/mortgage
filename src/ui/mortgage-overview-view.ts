@@ -874,15 +874,20 @@ export class MortgageOverviewView extends Base {
                                   Avg · period
                                 </td>
                                 <td class="num">
-                                  ${aud(t.avg_offset ?? 0)}/mo ·
-                                  ${t.period_offset ?? ''}
+                                  <div>${aud(t.avg_offset ?? 0)}/mo</div>
+                                  <div class="muted">
+                                    ${t.period_offset ?? ''}
+                                  </div>
                                 </td>
                                 <td class="num">
-                                  ${aud(t.avg_subtotal ?? 0)}/mo ·
-                                  ${t.period_subtotal ?? ''}
+                                  <div>${aud(t.avg_subtotal ?? 0)}/mo</div>
+                                  <div class="muted">
+                                    ${t.period_subtotal ?? ''}
+                                  </div>
                                 </td>
                                 <td class="num">
-                                  ${aud(f?.avg ?? 0)}/mo · ${f?.period ?? ''}
+                                  <div>${aud(f?.avg ?? 0)}/mo</div>
+                                  <div class="muted">${f?.period ?? ''}</div>
                                 </td>
                               </tr>
                               <tr>
