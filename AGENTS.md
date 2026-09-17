@@ -114,6 +114,12 @@ No revert needed before `npm run build` — `index.html` is dev-only and ignored
 
 ## 10. Checklist before `build`
 1) `npm run dev` → Add works with mock 2) no `HTMLElement` at top-level 3) `tables` prefix correct 4) `finance` only `import type` 5) test `build` → Install Folder → restart → panel Add + DB `SELECT * FROM mortgage_items` → `Delete Data` → `DROP` verified.
+6) Prettier-format check — always run before `git commit` (repo standard is `prettier --single-quote`):
+```bash
+npx prettier --check --single-quote "src/main.ts" "src/dao/**/*.ts" "src/services/**/*.ts" "src/ui/**/*.ts" "src/utils/**/*.ts" "src/mock/**/*.ts" "src/shared/**/*.ts" "scripts/**/*.mjs" "vite.config.ts" "index.html"
+# if anything fails the check, fix with the same file list and --write instead of --check
+```
+Never format vendored snapshots (`src/finance.d.ts`, `src/vite-env.d.ts`, `src/vendor/**`, `src/styles/**`) — they are overwritten by `refresh` and must stay byte-identical to upstream.
 
 ## 11. Out of scope — what to do
 If this file doesn't cover your case: check `D:\finance_flow_ai\docs/extension-api.md` + `D:\finance_flow_ai\src/types/finance.d.ts` (canonical API/types), and `extensions/salary-history` / `extensions/dashboard` as working references. For product decisions (new `tables`, cross-extension `services.invoke`, breaking changes after `refresh`), ask the owner — don't guess the table/service contract.
