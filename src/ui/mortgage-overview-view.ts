@@ -200,6 +200,10 @@ export class MortgageOverviewView extends Base {
             .hist-table.targets-table tbody td:first-child {
               padding-left: 8px;
             }
+            .hist-table.targets-table .period-line {
+              color: var(--ff-text-muted, #858585);
+              font-size: var(--ff-font-base);
+            }
           `,
         ] as any)
       : [];
@@ -875,19 +879,21 @@ export class MortgageOverviewView extends Base {
                                 </td>
                                 <td class="num">
                                   <div>${aud(t.avg_offset ?? 0)}/mo</div>
-                                  <div class="muted">
+                                  <div class="period-line">
                                     ${t.period_offset ?? ''}
                                   </div>
                                 </td>
                                 <td class="num">
                                   <div>${aud(t.avg_subtotal ?? 0)}/mo</div>
-                                  <div class="muted">
+                                  <div class="period-line">
                                     ${t.period_subtotal ?? ''}
                                   </div>
                                 </td>
                                 <td class="num">
                                   <div>${aud(f?.avg ?? 0)}/mo</div>
-                                  <div class="muted">${f?.period ?? ''}</div>
+                                  <div class="period-line">
+                                    ${f?.period ?? ''}
+                                  </div>
                                 </td>
                               </tr>
                               <tr>
