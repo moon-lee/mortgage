@@ -179,9 +179,25 @@ export class MortgageOverviewView extends Base {
               font-size: var(--ff-font-sm);
             }
             .flex-select {
+              width: 100%;
               max-width: 100%;
+              background: var(--ff-bg-input, #3c3c3c);
+              border: 1px solid var(--ff-accent, #007acc);
+              color: var(--ff-accent, #007acc);
+              border-radius: 10px;
+              padding: 2px 8px;
               font-size: var(--ff-font-sm);
               font-weight: 700;
+              cursor: pointer;
+            }
+            .hist-table.targets-table thead th,
+            .hist-table.targets-table tbody td {
+              padding-left: 16px;
+              padding-right: 16px;
+            }
+            .hist-table.targets-table thead th:first-child,
+            .hist-table.targets-table tbody td:first-child {
+              padding-left: 8px;
             }
           `,
         ] as any)
@@ -794,7 +810,7 @@ export class MortgageOverviewView extends Base {
                       `
                     : html`
                         <div class="table-wrap">
-                          <table class="hist-table">
+                          <table class="hist-table targets-table">
                             <colgroup>
                               <col style="width:18%" />
                               <col style="width:27%" />
