@@ -903,15 +903,22 @@ export class MortgageOverviewView extends Base {
                                   Date · trail
                                 </td>
                                 <td class="num">
-                                  ${t.date_offset ?? ''} ·
-                                  ${aud(t.trail_avg_offset ?? 0)}/mo
+                                  <div>${t.date_offset ?? ''}</div>
+                                  <div class="period-line">
+                                    ${aud(t.trail_avg_offset ?? 0)}/mo
+                                  </div>
                                 </td>
                                 <td class="num">
-                                  ${t.date_subtotal ?? ''} ·
-                                  ${aud(t.trail_avg_subtotal ?? 0)}/mo
+                                  <div>${t.date_subtotal ?? ''}</div>
+                                  <div class="period-line">
+                                    ${aud(t.trail_avg_subtotal ?? 0)}/mo
+                                  </div>
                                 </td>
                                 <td class="num">
-                                  ${f?.date ?? ''} · ${aud(f?.trailAvg ?? 0)}/mo
+                                  <div>${f?.date ?? ''}</div>
+                                  <div class="period-line">
+                                    ${aud(f?.trailAvg ?? 0)}/mo
+                                  </div>
                                 </td>
                               </tr>
                             </tbody>
