@@ -188,6 +188,7 @@ export class MortgageOverviewView extends Base {
               padding: 2px 8px;
               font-size: var(--ff-font-sm);
               font-weight: 700;
+              text-align: right;
               cursor: pointer;
             }
             .hist-table.targets-table thead th,
