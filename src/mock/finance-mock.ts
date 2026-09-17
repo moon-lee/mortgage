@@ -12,6 +12,9 @@ export function createMockFinance(): import('finance').FinanceApi {
     string,
     Record<string, (p?: unknown) => unknown>
   > = g.__mockServices;
+  // in-memory settings store — same lifetime as services so dev HMR keeps values
+  if (!g.__mockSettings) g.__mockSettings = new Map<string, unknown>();
+  const settingsStore: Map<string, unknown> = g.__mockSettings;
   const table = (name: string) => {
     if (!mem.has(name)) mem.set(name, new Map());
     const m = mem.get(name)!;
@@ -81,6 +84,12 @@ export function createMockFinance(): import('finance').FinanceApi {
       onBeforeUnmount: () => {},
     },
     events: { on: () => () => {}, emit: async () => {} },
-    settings: { get: async () => null, set: async () => {} },
+    settings: {
+      get: async (key: string) =>
+        settingsStore.has(key) ? settingsStore.get(key) : null,
+      set: async (key: string, value: unknown) => {
+        settingsStore.set(key, value);
+      },
+    },
   } as never;
 }
