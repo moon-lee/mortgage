@@ -179,8 +179,8 @@ export class MortgageOverviewView extends Base {
               font-size: var(--ff-font-sm);
             }
             .flex-select {
-              width: 100%;
-              max-width: 100%;
+              width: auto;
+              max-width: 160px;
               background: var(--ff-bg-input, #3c3c3c);
               border: 1px solid var(--ff-accent, #007acc);
               color: var(--ff-accent, #007acc);
