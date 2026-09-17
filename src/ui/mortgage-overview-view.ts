@@ -1,12 +1,16 @@
 import { LitElement, css, html } from 'lit';
 import { sharedStyles } from '../styles/shared-styles.js';
 import { getLoan } from '../dao/loans.js';
+import { listAccounts } from '../dao/accounts.js';
 import {
   getSnapshot,
   getSnapshotHistory,
   getPaceHistory,
   getTargetEstimates,
   getYearly,
+  getBalanceSeries,
+  getTargetEstimateForSeries,
+  type TargetEstimate,
 } from '../services/mortgage-service.js';
 import { aud } from '../utils/format.js';
 import {
@@ -192,6 +196,39 @@ export class MortgageOverviewView extends Base {
   editingLoan = false;
   editingTargets = false;
   cardOrder: OverviewCardId[] = [...CANONICAL_CARD_ORDER];
+  subAccounts: Array<{ id: number; account_key: string; label: string }> = [];
+  flexAccountKey = '';
+  flexTarget = 50000;
+  flexEstimate: TargetEstimate | null = null;
+
+  private async refreshFlexEstimate(): Promise<void> {
+    const acc = this.subAccounts.find(
+      (a) => a.account_key === this.flexAccountKey,
+    );
+    if (!acc || !this.finance) {
+      this.flexEstimate = null;
+      return;
+    }
+    const series = await getBalanceSeries(this.finance, acc.id);
+    this.flexEstimate = getTargetEstimateForSeries(series, this.flexTarget);
+  }
+
+  private async onFlexAccountChange(e: Event): Promise<void> {
+    this.flexAccountKey = (e.target as HTMLSelectElement).value;
+    try {
+      await this.finance?.settings.set(
+        'mortgage.flexTarget',
+        JSON.stringify({
+          account_key: this.flexAccountKey,
+          amount: this.flexTarget,
+        }),
+      );
+    } catch {
+      /* view-only state still updates below */
+    }
+    await this.refreshFlexEstimate();
+    (this as any).requestUpdate?.();
+  }
 
   private cardIndex(id: OverviewCardId): number {
     const order = normalizeCardOrder(this.cardOrder);
@@ -214,6 +251,33 @@ export class MortgageOverviewView extends Base {
       this.targets = await getTargetEstimates(this.finance);
       this.paceHistory = await getPaceHistory(this.finance);
       this.yearly = await getYearly(this.finance, 5);
+      this.subAccounts = (
+        (await listAccounts(this.finance)) as Array<{
+          id: number;
+          account_key: string;
+          label: string;
+          is_active: boolean;
+        }>
+      ).filter((a) => a.account_key !== '0390' && a.is_active);
+      let savedKey = '';
+      let savedAmount = 50000;
+      try {
+        const raw = await this.finance.settings.get('mortgage.flexTarget');
+        const parsed =
+          typeof raw === 'string' ? JSON.parse(raw) : (raw as any);
+        if (parsed && typeof parsed.account_key === 'string')
+          savedKey = parsed.account_key;
+        if (parsed && Number.isFinite(Number(parsed.amount)))
+          savedAmount = Number(parsed.amount);
+      } catch {
+        /* defaults above */
+      }
+      if (!this.subAccounts.some((a) => a.account_key === savedKey)) {
+        savedKey = this.subAccounts[0]?.account_key ?? '';
+      }
+      this.flexAccountKey = savedKey;
+      this.flexTarget = savedAmount;
+      await this.refreshFlexEstimate();
     } catch (e: any) {
       this.error = String(e?.message || e);
     }
@@ -235,6 +299,8 @@ export class MortgageOverviewView extends Base {
     this.emit('target-edit', {
       target_amount_offset: q('#t-offset'),
       target_amount_subtotal: q('#t-subtotal'),
+      target_amount_flex: q('#t-flex'),
+      flex_account_key: this.flexAccountKey,
     });
   }
 
