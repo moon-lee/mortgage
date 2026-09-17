@@ -1,6 +1,11 @@
 import { ensureAccounts } from '../dao/accounts.js';
 import { ensureLoan } from '../dao/loans.js';
-import { SEED_LOAN, SEED_RATES, SEED_REPAYMENTS, SEED_VERSION } from './seed-data.js';
+import {
+  SEED_LOAN,
+  SEED_RATES,
+  SEED_REPAYMENTS,
+  SEED_VERSION,
+} from './seed-data.js';
 
 const FLAG = 'mortgage.seedVersion';
 
@@ -24,7 +29,9 @@ export async function seedMortgage(finance: any): Promise<void> {
   try {
     const v = await finance.settings.get(FLAG);
     if (typeof v === 'number' && v >= SEED_VERSION) return;
-  } catch { /* fall through to full check */ }
+  } catch {
+    /* fall through to full check */
+  }
 
   await ensureAccounts(finance);
 
@@ -33,14 +40,23 @@ export async function seedMortgage(finance: any): Promise<void> {
     await finance.db.table('mortgage_loans').insert({ ...SEED_LOAN });
   } else if (loanCount === 1) {
     const row = (await finance.db.table('mortgage_loans').findOne({})) as any;
-    if (row && Number(row.property_value) === 0 && Number(row.loan_amount) === 0 && Number(row.set_payment) === 0) {
-      await finance.db.table('mortgage_loans').update({ id: row.id }, { ...SEED_LOAN });
+    if (
+      row &&
+      Number(row.property_value) === 0 &&
+      Number(row.loan_amount) === 0 &&
+      Number(row.set_payment) === 0
+    ) {
+      await finance.db
+        .table('mortgage_loans')
+        .update({ id: row.id }, { ...SEED_LOAN });
     }
   }
 
   if ((await count(finance, 'mortgage_rate_history')) === 0) {
     for (const r of SEED_RATES) {
-      await finance.db.table('mortgage_rate_history').insert({ ...r, notes: null });
+      await finance.db
+        .table('mortgage_rate_history')
+        .insert({ ...r, notes: null });
     }
   }
 
@@ -53,7 +69,9 @@ export async function seedMortgage(finance: any): Promise<void> {
   // v2 top-up (2026-09-12: Jun–Aug 2026 rows): existing installs keep user months
   // and gain only seed dates they lack. Flag was read above (< SEED_VERSION here).
   for (const s of SEED_REPAYMENTS) {
-    const dupe = (await finance.db.table('mortgage_repayments').findOne({ entry_date: s.entry_date })) as any;
+    const dupe = (await finance.db
+      .table('mortgage_repayments')
+      .findOne({ entry_date: s.entry_date })) as any;
     if (!dupe) await insertSeedRepayment(finance, s);
   }
 
@@ -64,12 +82,25 @@ export async function seedMortgage(finance: any): Promise<void> {
   }
 }
 
-async function insertSeedRepayment(finance: any, s: {
-  entry_date: string; finance_year: string; scheduled_balance: number; actual_balance: number;
-  fy_interest: number; offset_saving_fy: number; actual_repayment: number; scheduled_payment: number;
-  interest_charged: number; base_amount: number; fee: number; total_paid: number; extra_paid: number;
-  offsets: Record<string, number>;
-}): Promise<void> {
+async function insertSeedRepayment(
+  finance: any,
+  s: {
+    entry_date: string;
+    finance_year: string;
+    scheduled_balance: number;
+    actual_balance: number;
+    fy_interest: number;
+    offset_saving_fy: number;
+    actual_repayment: number;
+    scheduled_payment: number;
+    interest_charged: number;
+    base_amount: number;
+    fee: number;
+    total_paid: number;
+    extra_paid: number;
+    offsets: Record<string, number>;
+  },
+): Promise<void> {
   const accounts = await ensureAccounts(finance);
   const byKey = new Map(accounts.map((a: any) => [a.account_key, a.id]));
   const res = await finance.db.table('mortgage_repayments').insert({

@@ -1,7 +1,11 @@
-export function dailyInterest(loanBalance: number, offsetTotal: number, rateDecimal: number): number {
+export function dailyInterest(
+  loanBalance: number,
+  offsetTotal: number,
+  rateDecimal: number,
+): number {
   const net = loanBalance - offsetTotal;
   if (!(net > 0) || !(rateDecimal > 0)) return 0;
-  return Math.round((net * (rateDecimal / 365)) * 100) / 100;
+  return Math.round(net * (rateDecimal / 365) * 100) / 100;
 }
 
 export function daysInMonth(entryDate: string): number {
@@ -17,13 +21,20 @@ export function monthlyInterest(daily: number, entryDate: string): number {
 }
 
 /** Sheet parity: D = F/(F+H) — actual repayment over repayment + interest charged. */
-export function yearlyPrincipalRatio(actualRepayment: number, interestCharged: number): number {
+export function yearlyPrincipalRatio(
+  actualRepayment: number,
+  interestCharged: number,
+): number {
   const total = actualRepayment + interestCharged;
   if (!(total > 0)) return 0;
   return actualRepayment / total;
 }
 
-export function avgSaving(firstBalance: number, lastBalance: number, count: number): number {
+export function avgSaving(
+  firstBalance: number,
+  lastBalance: number,
+  count: number,
+): number {
   if (!(count > 1)) return 0;
   return (lastBalance - firstBalance) / (count - 1);
 }
@@ -37,7 +48,11 @@ export function trailingMonthlyAvg(series: number[], window = 12): number {
   return tail.reduce((s, d) => s + d, 0) / tail.length;
 }
 
-export function estimateNperMonths(avgSavingPerMonth: number, currentBalance: number, target: number): number {
+export function estimateNperMonths(
+  avgSavingPerMonth: number,
+  currentBalance: number,
+  target: number,
+): number {
   if (!(avgSavingPerMonth > 0)) return 0;
   const remaining = target - currentBalance;
   if (remaining <= 0) return 0;
@@ -50,7 +65,15 @@ export function formatPeriod(totalMonths: number): string {
   const rem = m % 12;
   if (y === 0) return rem + ' Month' + (rem === 1 ? '' : 's');
   if (rem === 0) return y + ' Year' + (y === 1 ? '' : 's');
-  return y + ' Year' + (y === 1 ? '' : 's') + ' and ' + rem + ' Month' + (rem === 1 ? '' : 's');
+  return (
+    y +
+    ' Year' +
+    (y === 1 ? '' : 's') +
+    ' and ' +
+    rem +
+    ' Month' +
+    (rem === 1 ? '' : 's')
+  );
 }
 
 export function targetDateIso(nperMonths: number, fromIso?: string): string {

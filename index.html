@@ -5,13 +5,39 @@
     <title>Mortgage — dev</title>
     <link rel="stylesheet" href="/src/styles/ext-tokens.css" />
     <style>
-      html, body { height: 100%; margin: 0; }
-      body { background: var(--ff-bg-base,#1e1e1e); color: var(--ff-text,#d4d4d4); }
-      #app { height: 100%; }
-      mortgage-orchestrator, mortgage-overview, mortgage-ledger, mortgage-offsets, mortgage-rate-history, mortgage-month-end-form { display: block; height: 100%; }
-      #view-switcher { position:fixed; top:8px; right:8px; z-index:9999; padding:4px 8px;
-        font-size:12px; background:var(--ff-bg-secondary,#1e1e1e); color:var(--ff-text-primary,#ccc);
-        border:1px solid var(--ff-border,#444); border-radius:4px; }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        background: var(--ff-bg-base, #1e1e1e);
+        color: var(--ff-text, #d4d4d4);
+      }
+      #app {
+        height: 100%;
+      }
+      mortgage-orchestrator,
+      mortgage-overview,
+      mortgage-ledger,
+      mortgage-offsets,
+      mortgage-rate-history,
+      mortgage-month-end-form {
+        display: block;
+        height: 100%;
+      }
+      #view-switcher {
+        position: fixed;
+        top: 8px;
+        right: 8px;
+        z-index: 9999;
+        padding: 4px 8px;
+        font-size: 12px;
+        background: var(--ff-bg-secondary, #1e1e1e);
+        color: var(--ff-text-primary, #ccc);
+        border: 1px solid var(--ff-border, #444);
+        border-radius: 4px;
+      }
     </style>
   </head>
   <body>
@@ -37,7 +63,8 @@
       const switcher = document.getElementById('view-switcher');
       VIEWS.forEach((v, i) => {
         const opt = document.createElement('option');
-        opt.value = i; opt.text = v.label;
+        opt.value = i;
+        opt.text = v.label;
         switcher.appendChild(opt);
       });
 
@@ -45,12 +72,16 @@
       let current = null;
 
       async function mountView(index) {
-        if (current) { current.remove(); current = null; }
+        if (current) {
+          current.remove();
+          current = null;
+        }
         const v = VIEWS[index];
         const el = document.createElement(v.tag);
         document.getElementById('app').appendChild(el);
         current = el;
-        if (typeof main.activate === 'function') await main.activate(finance, { viewId: v.tag.replace('-view', '') });
+        if (typeof main.activate === 'function')
+          await main.activate(finance, { viewId: v.tag.replace('-view', '') });
       }
 
       switcher.addEventListener('change', (e) => mountView(+e.target.value));

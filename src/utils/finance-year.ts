@@ -6,7 +6,10 @@ function parseIsoDate(s: string): number | null {
   return Number.isNaN(t) ? null : t;
 }
 
-export function computeFinanceYear(entryDate: string, financialYearStart: string): string | null {
+export function computeFinanceYear(
+  entryDate: string,
+  financialYearStart: string,
+): string | null {
   const ts = parseIsoDate(entryDate);
   if (ts === null) return null;
   const parts = (financialYearStart || '').split('-');
@@ -16,8 +19,11 @@ export function computeFinanceYear(entryDate: string, financialYearStart: string
   const d = new Date(ts);
   const year = d.getUTCFullYear();
   const fyStartThisYear = Date.parse(year + '-' + mm + '-' + dd + 'T00:00:00Z');
-  const fyStartLastYear = Date.parse(year - 1 + '-' + mm + '-' + dd + 'T00:00:00Z');
-  if (Number.isNaN(fyStartThisYear) || Number.isNaN(fyStartLastYear)) return null;
+  const fyStartLastYear = Date.parse(
+    year - 1 + '-' + mm + '-' + dd + 'T00:00:00Z',
+  );
+  if (Number.isNaN(fyStartThisYear) || Number.isNaN(fyStartLastYear))
+    return null;
   let fyStartYear: number;
   if (ts >= fyStartThisYear) fyStartYear = year;
   else if (ts >= fyStartLastYear) fyStartYear = year - 1;
