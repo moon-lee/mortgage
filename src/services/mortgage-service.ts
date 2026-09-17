@@ -358,6 +358,52 @@ export async function getTargetEstimates(
   };
 }
 
+export interface TargetEstimate {
+  avg: number;
+  period: string;
+  date: string;
+  trailAvg: number;
+  trailPeriod: string;
+  trailDate: string;
+}
+
+/** Same Avg/Date math as the Main/Sub columns, applied to any balance series (oldest first). */
+export function getTargetEstimateForSeries(
+  series: number[],
+  target: number,
+): TargetEstimate {
+  const first = series.length ? series[0] : 0;
+  const last = series.length ? series[series.length - 1] : 0;
+  const avg = avgSaving(first, last, series.length);
+  const n = estimateNperMonths(avg, last, target);
+  const trail = trailingMonthlyAvg(series, 12);
+  const trailN = estimateNperMonths(trail, last, target);
+  return {
+    avg: Math.round(avg * 100) / 100,
+    period: formatPeriod(n),
+    date: targetDateIso(n),
+    trailAvg: Math.round(trail * 100) / 100,
+    trailPeriod: formatPeriod(trailN),
+    trailDate: targetDateIso(trailN),
+  };
+}
+
+/** Oldest-first per-snapshot balance series for one offset account. */
+export async function getBalanceSeries(
+  finance: any,
+  accountId: number,
+): Promise<number[]> {
+  const rows = await listRepayments(finance);
+  const out: number[] = [];
+  for (const r of rows) {
+    const bals = await listBalancesForRepayment(finance, r.id);
+    out.push(
+      Number(bals.find((b) => b.account_id === accountId)?.balance || 0),
+    );
+  }
+  return out;
+}
+
 export { ensureLoan, getLoan, updateLoan };
 
 export interface PacePoint {
