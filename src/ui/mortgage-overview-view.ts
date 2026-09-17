@@ -178,6 +178,11 @@ export class MortgageOverviewView extends Base {
               color: var(--ff-text-muted, #858585);
               font-size: var(--ff-font-sm);
             }
+            .flex-select {
+              max-width: 100%;
+              font-size: var(--ff-font-sm);
+              font-weight: 700;
+            }
           `,
         ] as any)
       : [];
@@ -351,6 +356,7 @@ export class MortgageOverviewView extends Base {
     const loan = this.loan || {};
     const snap = this.snapshot || {};
     const t = this.targets || {};
+    const f = this.flexEstimate;
 
     return html`
       <div class="view-scroll">
@@ -725,7 +731,7 @@ export class MortgageOverviewView extends Base {
                 ${
                   this.editingTargets
                     ? html`
-                        <div class="grid-2">
+                        <div class="grid-3">
                           <div class="field">
                             <label
                               >Main Offset target
@@ -758,6 +764,22 @@ export class MortgageOverviewView extends Base {
                               @blur=${(e: Event) => this.moneyBlur(e)}
                             />
                           </div>
+                          <div class="field">
+                            <label
+                              >Flex target
+                              <span class="label-sub">AUD</span></label
+                            >
+                            <input
+                              id="t-flex"
+                              type="text"
+                              inputmode="decimal"
+                              .value=${MortgageOverviewView.grouped(
+                                this.flexTarget,
+                              )}
+                              @focus=${(e: Event) => this.moneyFocus(e)}
+                              @blur=${(e: Event) => this.moneyBlur(e)}
+                            />
+                          </div>
                         </div>
                         <div class="footer">
                           <button
@@ -776,8 +798,9 @@ export class MortgageOverviewView extends Base {
                           <table class="hist-table">
                             <colgroup>
                               <col style="width:18%" />
-                              <col style="width:41%" />
-                              <col style="width:41%" />
+                              <col style="width:27%" />
+                              <col style="width:27%" />
+                              <col style="width:28%" />
                             </colgroup>
                             <thead>
                               <tr>
@@ -790,6 +813,27 @@ export class MortgageOverviewView extends Base {
                                   Sub Offset
                                   <span class="muted">combined</span>
                                 </th>
+                                <th class="num">
+                                  <select
+                                    class="flex-select"
+                                    .value=${this.flexAccountKey}
+                                    @change=${(e: Event) =>
+                                      void this.onFlexAccountChange(e)}
+                                    title="Flexible offset account"
+                                  >
+                                    ${this.subAccounts.map(
+                                      (a) => html`
+                                        <option
+                                          value=${a.account_key}
+                                          ?selected=${a.account_key ===
+                                          this.flexAccountKey}
+                                        >
+                                          ${a.label} ${a.account_key}
+                                        </option>
+                                      `,
+                                    )}
+                                  </select>
+                                </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -800,6 +844,9 @@ export class MortgageOverviewView extends Base {
                                 </td>
                                 <td class="num money">
                                   ${aud(t.target_subtotal ?? 100000)}
+                                </td>
+                                <td class="num money">
+                                  ${aud(this.flexTarget)}
                                 </td>
                               </tr>
                               <tr>
@@ -816,6 +863,9 @@ export class MortgageOverviewView extends Base {
                                   ${aud(t.avg_subtotal ?? 0)}/mo ·
                                   ${t.period_subtotal ?? ''}
                                 </td>
+                                <td class="num">
+                                  ${aud(f?.avg ?? 0)}/mo · ${f?.period ?? ''}
+                                </td>
                               </tr>
                               <tr>
                                 <td
@@ -830,6 +880,10 @@ export class MortgageOverviewView extends Base {
                                 <td class="num">
                                   ${t.date_subtotal ?? ''} ·
                                   ${aud(t.trail_avg_subtotal ?? 0)}/mo
+                                </td>
+                                <td class="num">
+                                  ${f?.date ?? ''} ·
+                                  ${aud(f?.trailAvg ?? 0)}/mo
                                 </td>
                               </tr>
                             </tbody>
