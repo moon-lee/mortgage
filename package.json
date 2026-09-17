@@ -1,100 +1,361 @@
 {
   "name": "mortgage",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "type": "module",
   "main": "src/main.ts",
   "financeExtension": {
     "id": "mortgage",
     "displayName": "Mortgage",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "Mortgage extension",
     "themeColor": "#2196F3",
-    "activationEvents": ["onView:mortgage"],
+    "activationEvents": [
+      "onView:mortgage"
+    ],
     "contributions": {
-      "views": [{ "id": "mortgage", "name": "Mortgage", "icon": "assets/icon.svg" }],
+      "views": [
+        {
+          "id": "mortgage",
+          "name": "Mortgage",
+          "icon": "assets/icon.svg"
+        }
+      ],
       "commands": [
-        { "id": "mortgage.show-overview", "title": "Mortgage: Overview" },
-        { "id": "mortgage.show-ledger", "title": "Mortgage: Repayment Ledger" },
-        { "id": "mortgage.show-offsets", "title": "Mortgage: Offsets" },
-        { "id": "mortgage.show-rates", "title": "Mortgage: Rate History" },
-        { "id": "mortgage.show-accounts", "title": "Mortgage: Offset Accounts" }
+        {
+          "id": "mortgage.show-overview",
+          "title": "Mortgage: Overview"
+        },
+        {
+          "id": "mortgage.show-ledger",
+          "title": "Mortgage: Repayment Ledger"
+        },
+        {
+          "id": "mortgage.show-offsets",
+          "title": "Mortgage: Offsets"
+        },
+        {
+          "id": "mortgage.show-rates",
+          "title": "Mortgage: Rate History"
+        },
+        {
+          "id": "mortgage.show-accounts",
+          "title": "Mortgage: Offset Accounts"
+        }
       ],
       "navigation": [
-        { "id": "mortgage-overview", "label": "Overview", "command": "mortgage.show-overview", "group": "Mortgage" },
-        { "id": "mortgage-ledger", "label": "Repayment Ledger", "command": "mortgage.show-ledger", "group": "Mortgage" },
-        { "id": "mortgage-offsets", "label": "Offsets", "command": "mortgage.show-offsets", "group": "Mortgage" },
-        { "id": "mortgage-rates", "label": "Rate History", "command": "mortgage.show-rates", "group": "Mortgage" },
-        { "id": "mortgage-accounts", "label": "Offset Accounts", "command": "mortgage.show-accounts", "group": "Mortgage" }
+        {
+          "id": "mortgage-overview",
+          "label": "Overview",
+          "command": "mortgage.show-overview",
+          "group": "Mortgage"
+        },
+        {
+          "id": "mortgage-ledger",
+          "label": "Repayment Ledger",
+          "command": "mortgage.show-ledger",
+          "group": "Mortgage"
+        },
+        {
+          "id": "mortgage-offsets",
+          "label": "Offsets",
+          "command": "mortgage.show-offsets",
+          "group": "Mortgage"
+        },
+        {
+          "id": "mortgage-rates",
+          "label": "Rate History",
+          "command": "mortgage.show-rates",
+          "group": "Mortgage"
+        },
+        {
+          "id": "mortgage-accounts",
+          "label": "Offset Accounts",
+          "command": "mortgage.show-accounts",
+          "group": "Mortgage"
+        }
       ],
       "configuration": [
-        { "key": "mortgage.themeColor", "type": "string", "label": "Accent color for icons, topbar actions, and in-view highlights (hex).", "default": "#6366F1", "pattern": "^#[0-9A-Fa-f]{6}$", "formatHint": "#RRGGBB", "placeholder": "#6366F1" }
+        {
+          "key": "mortgage.themeColor",
+          "type": "string",
+          "label": "Accent color for icons, topbar actions, and in-view highlights (hex).",
+          "default": "#6366F1",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "formatHint": "#RRGGBB",
+          "placeholder": "#6366F1"
+        }
       ],
-      "allowedCommands": ["mortgage.show-overview", "mortgage.show-ledger", "mortgage.show-offsets", "mortgage.show-rates", "mortgage.show-accounts"],
+      "allowedCommands": [
+        "mortgage.show-overview",
+        "mortgage.show-ledger",
+        "mortgage.show-offsets",
+        "mortgage.show-rates",
+        "mortgage.show-accounts"
+      ],
       "allowedUiEvents": [
-        "monthend-add-request", "monthend-save", "monthend-cancel",
+        "monthend-add-request",
+        "monthend-save",
+        "monthend-cancel",
         "offset-edit-request",
-        "rate-add-request", "rate-create", "rate-edit-request", "rate-edit", "rate-form-cancel",
-        "target-edit", "fy-changed", "reorder-cards", "card-order-change", "card-order-cancel",
-        "account-create", "account-edit", "account-toggle", "monthend-delete"
+        "rate-add-request",
+        "rate-create",
+        "rate-edit-request",
+        "rate-edit",
+        "rate-form-cancel",
+        "target-edit",
+        "fy-changed",
+        "reorder-cards",
+        "card-order-change",
+        "card-order-cancel",
+        "account-create",
+        "account-edit",
+        "account-toggle",
+        "monthend-delete"
       ]
     },
     "tables": [
       {
         "name": "mortgage_loans",
         "columns": [
-          { "name": "property_value", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "deposit_amount", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "loan_amount", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "term_years", "type": "integer", "nullable": false, "default": 30, "min": 1, "max": 50 },
-          { "name": "set_payment", "type": "real", "nullable": false, "default": 0, "min": 0, "description": "Monthly set payment C7 (4200); extra = set_payment - P&I" },
-          { "name": "target_amount_offset", "type": "real", "nullable": false, "default": 100000, "min": 0, "description": "Editable M51 target" },
-          { "name": "target_amount_subtotal", "type": "real", "nullable": false, "default": 100000, "min": 0, "description": "Editable U51 target" },
-          { "name": "notes", "type": "text", "nullable": true }
+          {
+            "name": "property_value",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "deposit_amount",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "loan_amount",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "term_years",
+            "type": "integer",
+            "nullable": false,
+            "default": 30,
+            "min": 1,
+            "max": 50
+          },
+          {
+            "name": "set_payment",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0,
+            "description": "Monthly set payment C7 (4200); extra = set_payment - P&I"
+          },
+          {
+            "name": "target_amount_offset",
+            "type": "real",
+            "nullable": false,
+            "default": 100000,
+            "min": 0,
+            "description": "Editable M51 target"
+          },
+          {
+            "name": "target_amount_subtotal",
+            "type": "real",
+            "nullable": false,
+            "default": 100000,
+            "min": 0,
+            "description": "Editable U51 target"
+          },
+          {
+            "name": "notes",
+            "type": "text",
+            "nullable": true
+          }
         ]
       },
       {
         "name": "mortgage_rate_history",
         "columns": [
-          { "name": "effective_from", "type": "date", "nullable": false, "index": true },
-          { "name": "effective_to", "type": "date", "nullable": true },
-          { "name": "rate", "type": "real", "nullable": false, "min": 0, "max": 1 },
-          { "name": "notes", "type": "text", "nullable": true }
+          {
+            "name": "effective_from",
+            "type": "date",
+            "nullable": false,
+            "index": true
+          },
+          {
+            "name": "effective_to",
+            "type": "date",
+            "nullable": true
+          },
+          {
+            "name": "rate",
+            "type": "real",
+            "nullable": false,
+            "min": 0,
+            "max": 1
+          },
+          {
+            "name": "notes",
+            "type": "text",
+            "nullable": true
+          }
         ]
       },
       {
         "name": "mortgage_repayments",
         "columns": [
-          { "name": "entry_date", "type": "date", "nullable": false, "index": true, "description": "Snapshot date: any day within the month or a past month, normally month-end; future dates rejected; month-key YYYY-MM unique per calendar month (service-enforced)" },
-          { "name": "finance_year", "type": "text", "nullable": false, "index": true, "description": "Auto-set YYYY-YYYY from entry_date via computeFinanceYear + core.financialYear.start; never user-edited" },
-          { "name": "scheduled_balance", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "actual_balance", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "fy_interest", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "offset_saving_fy", "type": "real", "nullable": false, "default": 0, "min": 0, "description": "Stored D (Total offset / FY offset interest saving)" },
-          { "name": "actual_repayment", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "scheduled_payment", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "interest_charged", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "base_amount", "type": "real", "nullable": false, "default": 3899.36, "min": 0 },
-          { "name": "fee", "type": "real", "nullable": false, "default": 8, "min": 0 },
-          { "name": "total_paid", "type": "real", "nullable": false, "default": 0, "min": 0 },
-          { "name": "extra_paid", "type": "real", "nullable": false, "default": 0, "description": "Allows negatives (sheet R55 -411.99)" }
+          {
+            "name": "entry_date",
+            "type": "date",
+            "nullable": false,
+            "index": true,
+            "description": "Snapshot date: any day within the month or a past month, normally month-end; future dates rejected; month-key YYYY-MM unique per calendar month (service-enforced)"
+          },
+          {
+            "name": "finance_year",
+            "type": "text",
+            "nullable": false,
+            "index": true,
+            "description": "Auto-set YYYY-YYYY from entry_date via computeFinanceYear + core.financialYear.start; never user-edited"
+          },
+          {
+            "name": "scheduled_balance",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "actual_balance",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "fy_interest",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "offset_saving_fy",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0,
+            "description": "Stored D (Total offset / FY offset interest saving)"
+          },
+          {
+            "name": "actual_repayment",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "scheduled_payment",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "interest_charged",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "base_amount",
+            "type": "real",
+            "nullable": false,
+            "default": 3899.36,
+            "min": 0
+          },
+          {
+            "name": "fee",
+            "type": "real",
+            "nullable": false,
+            "default": 8,
+            "min": 0
+          },
+          {
+            "name": "total_paid",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "extra_paid",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "description": "Allows negatives (sheet R55 -411.99)"
+          }
         ]
       },
       {
         "name": "mortgage_accounts",
         "columns": [
-          { "name": "account_key", "type": "text", "nullable": false, "description": "Sheet account suffix, e.g. 0390" },
-          { "name": "label", "type": "text", "nullable": false },
-          { "name": "sort_order", "type": "integer", "nullable": false, "default": 0, "min": 0 },
-          { "name": "is_active", "type": "boolean", "nullable": false, "default": true }
+          {
+            "name": "account_key",
+            "type": "text",
+            "nullable": false,
+            "description": "Sheet account suffix, e.g. 0390"
+          },
+          {
+            "name": "label",
+            "type": "text",
+            "nullable": false
+          },
+          {
+            "name": "sort_order",
+            "type": "integer",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          },
+          {
+            "name": "is_active",
+            "type": "boolean",
+            "nullable": false,
+            "default": true
+          }
         ]
       },
       {
         "name": "mortgage_offset_balances",
         "columns": [
-          { "name": "repayment_id", "type": "integer", "nullable": false, "index": true, "references": "mortgage_repayments.id" },
-          { "name": "account_id", "type": "integer", "nullable": false, "index": true, "references": "mortgage_accounts.id" },
-          { "name": "balance", "type": "real", "nullable": false, "default": 0, "min": 0 }
+          {
+            "name": "repayment_id",
+            "type": "integer",
+            "nullable": false,
+            "index": true,
+            "references": "mortgage_repayments.id"
+          },
+          {
+            "name": "account_id",
+            "type": "integer",
+            "nullable": false,
+            "index": true,
+            "references": "mortgage_accounts.id"
+          },
+          {
+            "name": "balance",
+            "type": "real",
+            "nullable": false,
+            "default": 0,
+            "min": 0
+          }
         ]
       }
     ],
