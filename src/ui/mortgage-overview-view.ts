@@ -180,6 +180,33 @@ export class MortgageOverviewView extends Base {
               color: var(--ff-text-muted, #858585);
               font-size: var(--ff-font-sm);
             }
+            .repay-meta {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 12px;
+              flex-wrap: wrap;
+              margin-top: 12px;
+              padding: 8px 12px;
+              background: var(--ff-bg-subpanel, #2a2a2a);
+              border: 1px solid var(--ff-border, #3e3e3e);
+              border-radius: 6px;
+            }
+            .sim-input {
+              width: 100%;
+              background: var(--ff-bg-input, #3c3c3c);
+              border: 1px solid var(--ff-accent, #007acc);
+              color: var(--ff-accent, #007acc);
+              border-radius: 10px;
+              padding: 2px 8px;
+              font-size: var(--ff-font-base);
+              font-weight: 700;
+              text-align: right;
+            }
+            .sim-input:focus {
+              outline: 2px solid var(--ff-accent, #007acc);
+              outline-offset: 1px;
+            }
             .flex-select {
               width: auto;
               max-width: 160px;
@@ -282,6 +309,9 @@ export class MortgageOverviewView extends Base {
       this.paceHistory = await getPaceHistory(this.finance);
       this.yearly = await getYearly(this.finance, 5);
       this.minRepay = await getMinRepayment(this.finance);
+      if (this.simRate === '' && this.minRepay?.rate != null) {
+        this.simRate = (Number(this.minRepay.rate) * 100).toFixed(2);
+      }
       this.subAccounts = (
         (await listAccounts(this.finance)) as Array<{
           id: number;
@@ -812,7 +842,7 @@ export class MortgageOverviewView extends Base {
                                 min="0"
                                 max="100"
                                 placeholder="e.g. 5.50"
-                                style="width:100%"
+                                class="sim-input"
                                 .value=${this.simRate}
                                 @input=${(e: Event) => {
                                   this.simRate = (
@@ -824,9 +854,7 @@ export class MortgageOverviewView extends Base {
                             </div>
                           </div>
                         </div>
-                        <div
-                          style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"
-                        >
+                        <div class="repay-meta">
                           <span>
                             P ${aud(mr.principal)} · as at ${mr.asAt ?? '—'} ·
                             P&I excl.
@@ -841,13 +869,25 @@ export class MortgageOverviewView extends Base {
                               ? html`
                                   <span>
                                     Simulated ${aud(simMin)} /mo
-                                    (${simMin <= mr.minimum ? '−' : '+'}${aud(
-                                      Math.abs(simMin - Number(mr.minimum)),
-                                    )})
+                                    ${
+                                      Math.abs(simMin - Number(mr.minimum)) <
+                                      0.005
+                                        ? html`(= current rate)`
+                                        : html`(${
+                                            simMin <= mr.minimum ? '−' : '+'
+                                          }${aud(
+                                            Math.abs(
+                                              simMin - Number(mr.minimum),
+                                            ),
+                                          )})`
+                                    }
                                     <button
                                       class="btn btn-secondary"
                                       @click=${() => {
-                                        this.simRate = '';
+                                        this.simRate =
+                                          mr.rate != null
+                                            ? (Number(mr.rate) * 100).toFixed(2)
+                                            : '';
                                         (this as any).requestUpdate?.();
                                       }}
                                     >
