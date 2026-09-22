@@ -194,7 +194,6 @@ export class MortgageOverviewView extends Base {
             }
             .sim-result {
               color: var(--ff-accent, #007acc);
-              font-weight: 700;
             }
             .sim-input {
               width: 100%;
