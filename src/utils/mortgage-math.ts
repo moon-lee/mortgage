@@ -89,3 +89,28 @@ export function targetDateIso(nperMonths: number, fromIso?: string): string {
   const mm = String(mo).padStart(2, '0');
   return y + '-' + mm + '-' + String(d).padStart(2, '0');
 }
+
+/** Minimum monthly P&I repayment for principal at annualRate over monthsLeft payments. */
+export function minRepayment(
+  principal: number,
+  annualRate: number,
+  monthsLeft: number,
+): number {
+  if (!(principal > 0) || !(annualRate > 0) || !(monthsLeft > 0)) return 0;
+  const r = annualRate / 12;
+  const n = Math.floor(monthsLeft);
+  const factor = Math.pow(1 + r, n);
+  return Math.round(((principal * r * factor) / (factor - 1)) * 100) / 100;
+}
+
+/** Full calendar months from startIso to asOfIso (defaults today); 0 when asOf <= start. */
+export function elapsedMonths(startIso: string, asOfIso?: string): number {
+  const asOf = asOfIso || new Date().toISOString().slice(0, 10);
+  const m1 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(startIso);
+  const m2 = /^(\d{4})-(\d{2})-(\d{2})$/.exec(asOf);
+  if (!m1 || !m2) return 0;
+  let months =
+    (Number(m2[1]) - Number(m1[1])) * 12 + (Number(m2[2]) - Number(m1[2]));
+  if (Number(m2[3]) < Number(m1[3])) months -= 1;
+  return Math.max(0, months);
+}
