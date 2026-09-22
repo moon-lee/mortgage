@@ -824,36 +824,40 @@ export class MortgageOverviewView extends Base {
                             </div>
                           </div>
                         </div>
-                        <p>
-                          P ${aud(mr.principal)} · as at ${mr.asAt ?? '—'} · P&I
-                          excl.
-                          fee${
-                            mr.isEstimate
-                              ? ' · Estimate — start date not set'
+                        <div
+                          style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"
+                        >
+                          <span>
+                            P ${aud(mr.principal)} · as at ${mr.asAt ?? '—'} ·
+                            P&I excl.
+                            fee${
+                              mr.isEstimate
+                                ? ' · Estimate — start date not set'
+                                : ''
+                            }
+                          </span>
+                          ${
+                            simMin != null
+                              ? html`
+                                  <span>
+                                    Simulated ${aud(simMin)} /mo
+                                    (${simMin <= mr.minimum ? '−' : '+'}${aud(
+                                      Math.abs(simMin - Number(mr.minimum)),
+                                    )})
+                                    <button
+                                      class="btn btn-secondary"
+                                      @click=${() => {
+                                        this.simRate = '';
+                                        (this as any).requestUpdate?.();
+                                      }}
+                                    >
+                                      Reset
+                                    </button>
+                                  </span>
+                                `
                               : ''
                           }
-                        </p>
-                        ${
-                          simMin != null
-                            ? html`
-                                <p>
-                                  Simulated ${aud(simMin)} /mo
-                                  (${simMin <= mr.minimum ? '−' : '+'}${aud(
-                                    Math.abs(simMin - Number(mr.minimum)),
-                                  )})
-                                  <button
-                                    class="btn btn-secondary"
-                                    @click=${() => {
-                                      this.simRate = '';
-                                      (this as any).requestUpdate?.();
-                                    }}
-                                  >
-                                    Reset
-                                  </button>
-                                </p>
-                              `
-                            : ''
-                        }
+                        </div>
                       `
                 }
               </div>
