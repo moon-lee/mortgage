@@ -85,10 +85,17 @@ export class MortgageOverviewView extends Base {
               font-size: var(--ff-font-xs, 11px);
               padding: 0 8px;
             }
-            .loan-badge,
             .rate-badge {
               font-size: var(--ff-font-sm);
               padding: 1px 10px;
+            }
+            .loan-badge {
+              font-size: var(--ff-font-sm);
+              padding: 4px 10px;
+            }
+            .loan-actions .btn {
+              padding-top: 4px;
+              padding-bottom: 4px;
             }
             .hist-table {
               width: 100%;
@@ -527,7 +534,7 @@ export class MortgageOverviewView extends Base {
             <div class="section" style="order:${this.cardIndex('loan')}">
               <div class="section-header">
                 <h3 class="section-title">Loan setup</h3>
-                <div class="header-actions">
+                <div class="header-actions loan-actions">
                   <span class="loan-badge">
                     ${aud(loan.loan_amount ?? 0)} over
                     ${loan.term_years ?? 30}yrs
