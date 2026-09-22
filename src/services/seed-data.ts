@@ -25,6 +25,7 @@ export const SEED_LOAN = {
   deposit_amount: 45000,
   loan_amount: 642500,
   term_years: 30,
+  loan_start_date: '2023-09-15',
   set_payment: 4200,
   target_amount_offset: 100000,
   target_amount_subtotal: 100000,

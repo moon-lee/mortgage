@@ -4,6 +4,7 @@ export interface LoanRow {
   deposit_amount: number;
   loan_amount: number;
   term_years: number;
+  loan_start_date?: string | null;
   set_payment: number;
   target_amount_offset: number;
   target_amount_subtotal: number;
@@ -23,6 +24,7 @@ export async function ensureLoan(finance: any): Promise<LoanRow> {
     deposit_amount: 0,
     loan_amount: 0,
     term_years: 30,
+    loan_start_date: null,
     set_payment: 0,
     target_amount_offset: 100000,
     target_amount_subtotal: 100000,
@@ -51,6 +53,20 @@ export async function updateLoan(
     'term_years',
   ] as const) {
     if (patch[k] !== undefined) clean[k] = patch[k];
+  }
+  if (patch.loan_start_date !== undefined) {
+    const v = patch.loan_start_date as string | null;
+    if (v == null || v === '') {
+      clean.loan_start_date = null;
+    } else {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(v))
+        throw new Error('ValidationFailed: loan_start_date must be YYYY-MM-DD');
+      if (v > new Date().toISOString().slice(0, 10))
+        throw new Error(
+          'ValidationFailed: loan_start_date cannot be in the future',
+        );
+      clean.loan_start_date = v;
+    }
   }
   if (clean.term_years !== undefined) {
     const t = Number(clean.term_years);
