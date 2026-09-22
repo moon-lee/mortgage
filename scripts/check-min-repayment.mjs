@@ -22,6 +22,11 @@ assert.ok(
 assert.equal(minRepayment(100000, 0, 360), 0);
 assert.equal(minRepayment(0, 0.05, 360), 0);
 assert.equal(minRepayment(100000, 0.05, 0), 0);
+assert.equal(minRepayment(120000, 0.06, 0.5), 0);
+assert.ok(
+  Number.isFinite(minRepayment(120000, 1e-12, 360)),
+  'tiny rate stays finite',
+);
 // Full calendar months, day-adjusted, never negative
 assert.equal(elapsedMonths('2023-09-15', '2026-08-31'), 35);
 assert.equal(elapsedMonths('2023-09-15', '2023-09-15'), 0);

@@ -90,7 +90,7 @@ export function targetDateIso(nperMonths: number, fromIso?: string): string {
   return y + '-' + mm + '-' + String(d).padStart(2, '0');
 }
 
-/** Minimum monthly P&I repayment for principal at annualRate over monthsLeft payments. */
+/** Minimum monthly P&I repayment. @param principal loan balance @param annualRate decimal e.g. 0.0619 @param monthsLeft payments left (floored). Result rounded to cents. */
 export function minRepayment(
   principal: number,
   annualRate: number,
@@ -99,7 +99,10 @@ export function minRepayment(
   if (!(principal > 0) || !(annualRate > 0) || !(monthsLeft > 0)) return 0;
   const r = annualRate / 12;
   const n = Math.floor(monthsLeft);
+  if (!(n > 0)) return 0;
   const factor = Math.pow(1 + r, n);
+  if (!(factor > 1) || !Number.isFinite(factor))
+    return Math.round((principal / n) * 100) / 100;
   return Math.round(((principal * r * factor) / (factor - 1)) * 100) / 100;
 }
 
