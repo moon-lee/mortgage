@@ -192,6 +192,10 @@ export class MortgageOverviewView extends Base {
               border: 1px solid var(--ff-border, #3e3e3e);
               border-radius: 6px;
             }
+            .sim-result {
+              color: var(--ff-accent, #007acc);
+              font-weight: 700;
+            }
             .sim-input {
               width: 100%;
               background: var(--ff-bg-input, #3c3c3c);
@@ -941,8 +945,7 @@ export class MortgageOverviewView extends Base {
                           ${
                             simMin != null
                               ? html`
-                                  <span>
-                                    Simulated ${aud(simMin)} /mo
+                                  <span class="sim-result">
                                     ${
                                       Math.abs(simMin - Number(mr.minimum)) <
                                       0.005
