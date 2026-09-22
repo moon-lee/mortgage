@@ -434,7 +434,7 @@ export class MortgageOverviewView extends Base {
           : 0;
     const next = Math.min(
       100,
-      Math.max(0, Math.round((base + delta) * 20) / 20),
+      Math.max(0, Math.round((base + delta) * 100) / 100),
     );
     this.simRate = next.toFixed(2);
     (this as any).requestUpdate?.();
