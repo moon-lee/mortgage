@@ -802,8 +802,29 @@ export class MortgageOverviewView extends Base {
                               )}
                             </div>
                           </div>
+                          <div class="stat">
+                            <div class="stat-label">Simulate %</div>
+                            <div class="stat-value">
+                              <input
+                                id="sim-rate"
+                                type="number"
+                                step="0.05"
+                                min="0"
+                                max="100"
+                                placeholder="e.g. 5.50"
+                                style="width:100%"
+                                .value=${this.simRate}
+                                @input=${(e: Event) => {
+                                  this.simRate = (
+                                    e.target as HTMLInputElement
+                                  ).value;
+                                  (this as any).requestUpdate?.();
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <p class="muted">
+                        <p>
                           P ${aud(mr.principal)} · as at ${mr.asAt ?? '—'} · P&I
                           excl.
                           fee${
@@ -812,31 +833,10 @@ export class MortgageOverviewView extends Base {
                               : ''
                           }
                         </p>
-                        <div class="field">
-                          <label
-                            >Simulate rate
-                            <span class="label-sub"
-                              >% p.a. — display only</span
-                            ></label
-                          >
-                          <input
-                            id="sim-rate"
-                            type="text"
-                            inputmode="decimal"
-                            placeholder="e.g. 5.50"
-                            .value=${this.simRate}
-                            @input=${(e: Event) => {
-                              this.simRate = (
-                                e.target as HTMLInputElement
-                              ).value;
-                              (this as any).requestUpdate?.();
-                            }}
-                          />
-                        </div>
                         ${
                           simMin != null
                             ? html`
-                                <p class="muted">
+                                <p>
                                   Simulated ${aud(simMin)} /mo
                                   (${simMin <= mr.minimum ? '−' : '+'}${aud(
                                     Math.abs(simMin - Number(mr.minimum)),
