@@ -225,7 +225,7 @@ export class MortgageOverviewView extends Base {
             }
             .sim-stepper {
               display: flex;
-              align-items: center;
+              align-items: stretch;
               gap: 4px;
             }
             .sim-stepper .sim-input {
@@ -234,11 +234,15 @@ export class MortgageOverviewView extends Base {
             }
             .sim-btn {
               flex: 0 0 auto;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
               background: var(--ff-bg-input, #3c3c3c);
               border: 1px solid var(--ff-accent, #007acc);
               color: var(--ff-accent, #007acc);
               border-radius: 8px;
               padding: 2px 8px;
+              font-size: var(--ff-font-base);
               font-weight: 700;
               line-height: 1.4;
               cursor: pointer;
