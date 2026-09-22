@@ -3,6 +3,7 @@ import { ExtensionLogger } from 'finance-logger';
 import './styles/ext-tokens.css';
 import { seedMortgage } from './services/seed.js';
 import {
+  getMinRepayment,
   getSnapshot,
   getSummary,
   getYearly,
@@ -99,6 +100,7 @@ export async function activate(
       listRepayments(finance as any, (p as any)?.finance_year),
     yearly: async (p?: any) =>
       getYearly(finance as any, Number((p as any)?.lastN) || 5),
+    minRepayment: async () => getMinRepayment(finance as any),
     saveMonthEnd: async (p?: any) =>
       saveMonthEnd(finance as any, (p as any)?.input ?? p),
   });

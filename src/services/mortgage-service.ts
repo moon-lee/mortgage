@@ -8,6 +8,8 @@ import {
   targetDateIso,
   trailingMonthlyAvg,
   yearlyPrincipalRatio,
+  minRepayment,
+  elapsedMonths,
 } from '../utils/mortgage-math.js';
 import { listAccounts, listActiveAccounts } from '../dao/accounts.js';
 import { lookupRate, listRates } from '../dao/rates.js';
@@ -392,6 +394,55 @@ export async function getBalanceSeries(
     );
   }
   return out;
+}
+
+export interface MinRepayment {
+  minimum: number;
+  rate: number | null;
+  principal: number;
+  monthsLeft: number;
+  asAt: string | null;
+  isEstimate: boolean;
+}
+
+export async function getMinRepayment(finance: any): Promise<MinRepayment> {
+  const loan = (await getLoan(finance)) ?? (await ensureLoan(finance));
+  const latest = await getLatest(finance);
+  const asAt = latest?.entry_date ?? null;
+  const rates = await listRates(finance);
+  const hit = asAt ? lookupRate(rates, asAt) : null;
+  const rate = hit ? hit.rate : null;
+  if (!latest || rate == null) {
+    return {
+      minimum: 0,
+      rate,
+      principal: 0,
+      monthsLeft: 0,
+      asAt,
+      isEstimate: true,
+    };
+  }
+  const start = (loan as any).loan_start_date as string | null;
+  if (!start) {
+    return {
+      minimum: minRepayment(loan.loan_amount, rate, loan.term_years * 12),
+      rate,
+      principal: loan.loan_amount,
+      monthsLeft: loan.term_years * 12,
+      asAt,
+      isEstimate: true,
+    };
+  }
+  const monthsLeft =
+    loan.term_years * 12 - elapsedMonths(start, latest.entry_date);
+  return {
+    minimum: minRepayment(latest.actual_balance, rate, monthsLeft),
+    rate,
+    principal: latest.actual_balance,
+    monthsLeft,
+    asAt,
+    isEstimate: false,
+  };
 }
 
 export { ensureLoan, getLoan, updateLoan };
