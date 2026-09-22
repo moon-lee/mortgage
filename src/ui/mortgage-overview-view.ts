@@ -105,6 +105,14 @@ export class MortgageOverviewView extends Base {
               padding-top: 4px;
               padding-bottom: 4px;
             }
+            .repayment-actions .rate-badge {
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
+            .targets-actions .btn {
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
             .hist-table {
               width: 100%;
               border-collapse: collapse;
@@ -859,7 +867,7 @@ export class MortgageOverviewView extends Base {
             <div class="section" style="order:${this.cardIndex('repayment')}">
               <div class="section-header">
                 <h3 class="section-title">Minimum repayment</h3>
-                <div class="header-actions">
+                <div class="header-actions repayment-actions">
                   ${
                     mr.rate != null
                       ? html`
@@ -1003,7 +1011,7 @@ export class MortgageOverviewView extends Base {
             <div class="section" style="order:${this.cardIndex('targets')}">
               <div class="section-header">
                 <h3 class="section-title">Savings targets</h3>
-                <div class="header-actions">
+                <div class="header-actions targets-actions">
                   <button
                     class="btn btn-secondary"
                     @click=${() => {
