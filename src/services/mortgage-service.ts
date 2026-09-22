@@ -422,7 +422,7 @@ export async function getMinRepayment(finance: any): Promise<MinRepayment> {
       isEstimate: true,
     };
   }
-  const start = (loan as any).loan_start_date as string | null;
+  const start = loan.loan_start_date ?? null;
   if (!start) {
     return {
       minimum: minRepayment(loan.loan_amount, rate, loan.term_years * 12),
