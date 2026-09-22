@@ -201,11 +201,43 @@ export class MortgageOverviewView extends Base {
               padding: 2px 8px;
               font-size: var(--ff-font-base);
               font-weight: 700;
-              text-align: right;
+              text-align: center;
             }
             .sim-input:focus {
               outline: 2px solid var(--ff-accent, #007acc);
               outline-offset: 1px;
+            }
+            .sim-input::-webkit-outer-spin-button,
+            .sim-input::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+            .sim-input[type='number'] {
+              -moz-appearance: textfield;
+              appearance: textfield;
+            }
+            .sim-stat .stat-label {
+              text-align: center;
+            }
+            .sim-stepper {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            }
+            .sim-stepper .sim-input {
+              flex: 1;
+              min-width: 0;
+            }
+            .sim-btn {
+              flex: 0 0 auto;
+              background: var(--ff-bg-input, #3c3c3c);
+              border: 1px solid var(--ff-accent, #007acc);
+              color: var(--ff-accent, #007acc);
+              border-radius: 8px;
+              padding: 2px 8px;
+              font-weight: 700;
+              line-height: 1.4;
+              cursor: pointer;
             }
             .flex-select {
               width: auto;
@@ -389,6 +421,23 @@ export class MortgageOverviewView extends Base {
     input.value = MortgageOverviewView.grouped(
       MortgageOverviewView.rawNumber(input.value),
     );
+  }
+
+  private stepSim(delta: number): void {
+    const raw = String(this.simRate ?? '').trim();
+    const cur = Number(raw.replace(/[^0-9.\-]/g, ''));
+    const base =
+      raw !== '' && Number.isFinite(cur)
+        ? cur
+        : this.minRepay?.rate != null
+          ? Number(this.minRepay.rate) * 100
+          : 0;
+    const next = Math.min(
+      100,
+      Math.max(0, Math.round((base + delta) * 20) / 20),
+    );
+    this.simRate = next.toFixed(2);
+    (this as any).requestUpdate?.();
   }
 
   private saveLoan(): void {
@@ -832,25 +881,50 @@ export class MortgageOverviewView extends Base {
                               )}
                             </div>
                           </div>
-                          <div class="stat">
-                            <div class="stat-label">Simulate %</div>
+                          <div class="stat sim-stat">
+                            <div class="stat-label">Simulate rate %</div>
                             <div class="stat-value">
-                              <input
-                                id="sim-rate"
-                                type="number"
-                                step="0.05"
-                                min="0"
-                                max="100"
-                                placeholder="e.g. 5.50"
-                                class="sim-input"
-                                .value=${this.simRate}
-                                @input=${(e: Event) => {
-                                  this.simRate = (
-                                    e.target as HTMLInputElement
-                                  ).value;
-                                  (this as any).requestUpdate?.();
-                                }}
-                              />
+                              <div class="sim-stepper">
+                                <button
+                                  class="sim-btn"
+                                  title="−0.05%"
+                                  @click=${() => this.stepSim(-0.05)}
+                                >
+                                  −
+                                </button>
+                                <input
+                                  id="sim-rate"
+                                  type="number"
+                                  step="any"
+                                  min="0"
+                                  max="100"
+                                  placeholder="e.g. 5.50"
+                                  class="sim-input"
+                                  .value=${this.simRate}
+                                  @input=${(e: Event) => {
+                                    this.simRate = (
+                                      e.target as HTMLInputElement
+                                    ).value;
+                                    (this as any).requestUpdate?.();
+                                  }}
+                                  @keydown=${(e: KeyboardEvent) => {
+                                    if (e.key === 'ArrowUp') {
+                                      e.preventDefault();
+                                      this.stepSim(0.05);
+                                    } else if (e.key === 'ArrowDown') {
+                                      e.preventDefault();
+                                      this.stepSim(-0.05);
+                                    }
+                                  }}
+                                />
+                                <button
+                                  class="sim-btn"
+                                  title="+0.05%"
+                                  @click=${() => this.stepSim(0.05)}
+                                >
+                                  +
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
