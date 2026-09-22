@@ -1,13 +1,13 @@
 {
   "name": "mortgage",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "type": "module",
   "main": "src/main.ts",
   "financeExtension": {
     "id": "mortgage",
     "displayName": "Mortgage",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "description": "Mortgage extension",
     "themeColor": "#2196F3",
     "activationEvents": [
