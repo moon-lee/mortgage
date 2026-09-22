@@ -10,9 +10,11 @@ import {
   getYearly,
   getBalanceSeries,
   getTargetEstimateForSeries,
+  getMinRepayment,
   type TargetEstimate,
 } from '../services/mortgage-service.js';
 import { aud } from '../utils/format.js';
+import { minRepayment } from '../utils/mortgage-math.js';
 import {
   CANONICAL_CARD_ORDER,
   normalizeCardOrder,
@@ -215,6 +217,8 @@ export class MortgageOverviewView extends Base {
   targets: any = null;
   paceHistory: any[] = [];
   yearly: any[] = [];
+  minRepay: any = null;
+  simRate = '';
   error = '';
 
   showPaceHistory = false;
@@ -277,6 +281,7 @@ export class MortgageOverviewView extends Base {
       this.targets = await getTargetEstimates(this.finance);
       this.paceHistory = await getPaceHistory(this.finance);
       this.yearly = await getYearly(this.finance, 5);
+      this.minRepay = await getMinRepayment(this.finance);
       this.subAccounts = (
         (await listAccounts(this.finance)) as Array<{
           id: number;
@@ -362,11 +367,16 @@ export class MortgageOverviewView extends Base {
       MortgageOverviewView.rawNumber(
         (root?.querySelector(id) as HTMLInputElement)?.value,
       );
+    const startRaw =
+      (
+        root?.querySelector('#l-start') as HTMLInputElement | null
+      )?.value?.trim() || null;
     this.emit('target-edit', {
       property_value: q('#l-property'),
       deposit_amount: q('#l-deposit'),
       loan_amount: q('#l-loan'),
       set_payment: q('#l-set'),
+      loan_start_date: startRaw,
     });
   }
 
@@ -377,6 +387,22 @@ export class MortgageOverviewView extends Base {
     const snap = this.snapshot || {};
     const t = this.targets || {};
     const f = this.flexEstimate;
+    const mr = this.minRepay || {
+      minimum: 0,
+      rate: null,
+      principal: 0,
+      monthsLeft: 0,
+      asAt: null,
+      isEstimate: true,
+    };
+    const simRaw = String(this.simRate ?? '').trim();
+    const simNum = Number(simRaw.replace(/[^0-9.\-]/g, ''));
+    const simValid =
+      simRaw !== '' && Number.isFinite(simNum) && simNum > 0 && simNum <= 100;
+    const simMin =
+      simValid && mr.rate != null
+        ? minRepayment(mr.principal, simNum / 100, mr.monthsLeft)
+        : null;
 
     return html`
       <div class="view-scroll">
@@ -497,6 +523,17 @@ export class MortgageOverviewView extends Base {
                               )}
                               @focus=${(e: Event) => this.moneyFocus(e)}
                               @blur=${(e: Event) => this.moneyBlur(e)}
+                            />
+                          </div>
+                          <div class="field">
+                            <label
+                              >Loan start
+                              <span class="label-sub">YYYY-MM-DD</span></label
+                            >
+                            <input
+                              id="l-start"
+                              type="date"
+                              .value=${loan.loan_start_date ?? ''}
                             />
                           </div>
                         </div>
@@ -712,6 +749,111 @@ export class MortgageOverviewView extends Base {
                         <span class="empty">
                           No snapshots yet — add a month-end entry.
                         </span>
+                      `
+                }
+              </div>
+            </div>
+
+            <!-- Minimum repayment -->
+            <div class="section" style="order:${this.cardIndex('repayment')}">
+              <div class="section-header">
+                <h3 class="section-title">Minimum repayment</h3>
+                <div class="header-actions">
+                  ${
+                    mr.rate != null
+                      ? html`
+                          <span class="rate-badge">
+                            Rate @ ${(Number(mr.rate) * 100).toFixed(2)}% ·
+                            ${mr.monthsLeft} mo left
+                          </span>
+                        `
+                      : ''
+                  }
+                </div>
+              </div>
+
+              <div class="section-body">
+                ${
+                  mr.rate == null
+                    ? html`
+                        <span class="empty">
+                          No rate covers ${mr.asAt ?? 'the latest month-end'} —
+                          add one in Rate History.
+                        </span>
+                      `
+                    : html`
+                        <div class="stat-grid">
+                          <div class="stat">
+                            <div class="stat-label">Minimum / mo</div>
+                            <div class="stat-value">${aud(mr.minimum)}</div>
+                          </div>
+                          <div class="stat">
+                            <div class="stat-label">You pay</div>
+                            <div class="stat-value">
+                              ${aud(loan.set_payment ?? 0)}
+                            </div>
+                          </div>
+                          <div class="stat">
+                            <div class="stat-label">Extra / mo</div>
+                            <div class="stat-value">
+                              ${aud(
+                                Number(loan.set_payment ?? 0) -
+                                  Number(mr.minimum),
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <p class="muted">
+                          P ${aud(mr.principal)} · as at ${mr.asAt ?? '—'} · P&I
+                          excl.
+                          fee${
+                            mr.isEstimate
+                              ? ' · Estimate — start date not set'
+                              : ''
+                          }
+                        </p>
+                        <div class="field">
+                          <label
+                            >Simulate rate
+                            <span class="label-sub"
+                              >% p.a. — display only</span
+                            ></label
+                          >
+                          <input
+                            id="sim-rate"
+                            type="text"
+                            inputmode="decimal"
+                            placeholder="e.g. 5.50"
+                            .value=${this.simRate}
+                            @input=${(e: Event) => {
+                              this.simRate = (
+                                e.target as HTMLInputElement
+                              ).value;
+                              (this as any).requestUpdate?.();
+                            }}
+                          />
+                        </div>
+                        ${
+                          simMin != null
+                            ? html`
+                                <p class="muted">
+                                  Simulated ${aud(simMin)} /mo
+                                  (${simMin <= mr.minimum ? '−' : '+'}${aud(
+                                    Math.abs(simMin - Number(mr.minimum)),
+                                  )})
+                                  <button
+                                    class="btn btn-secondary"
+                                    @click=${() => {
+                                      this.simRate = '';
+                                      (this as any).requestUpdate?.();
+                                    }}
+                                  >
+                                    Reset
+                                  </button>
+                                </p>
+                              `
+                            : ''
+                        }
                       `
                 }
               </div>
