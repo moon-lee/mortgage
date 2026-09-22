@@ -946,6 +946,7 @@ export class MortgageOverviewView extends Base {
                             simMin != null
                               ? html`
                                   <span class="sim-result">
+                                    Simulated ${aud(simMin)} /mo
                                     ${
                                       Math.abs(simMin - Number(mr.minimum)) <
                                       0.005
