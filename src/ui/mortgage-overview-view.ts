@@ -97,6 +97,14 @@ export class MortgageOverviewView extends Base {
               padding-top: 4px;
               padding-bottom: 4px;
             }
+            .snapshot-actions .rate-badge {
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
+            .snapshot-actions .btn {
+              padding-top: 4px;
+              padding-bottom: 4px;
+            }
             .hist-table {
               width: 100%;
               border-collapse: collapse;
@@ -678,7 +686,7 @@ export class MortgageOverviewView extends Base {
             <div class="section" style="order:${this.cardIndex('snapshot')}">
               <div class="section-header">
                 <h3 class="section-title">Daily interest snapshot</h3>
-                <div class="header-actions">
+                <div class="header-actions snapshot-actions">
                   ${
                     snap.rate != null
                       ? html`
