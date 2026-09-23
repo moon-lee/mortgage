@@ -11,7 +11,8 @@
     "description": "Mortgage extension",
     "themeColor": "#2196F3",
     "activationEvents": [
-      "onView:mortgage"
+      "onView:mortgage",
+      "onStartup"
     ],
     "contributions": {
       "views": [
