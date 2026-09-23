@@ -121,6 +121,17 @@ export class MortgageOffsetsView extends Base {
             .stat-value.accent {
               color: var(--ff-accent, #007acc);
             }
+            .pager {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 12px;
+              margin-top: 12px;
+            }
+            .muted {
+              color: var(--ff-text-muted, #858585);
+              font-size: var(--ff-font-sm);
+            }
           `,
         ] as any)
       : [];
@@ -133,6 +144,7 @@ export class MortgageOffsetsView extends Base {
     total: number;
   }> = [];
   error = '';
+  page = 0;
 
   async setFinance(f: any): Promise<void> {
     this.finance = f;
@@ -169,6 +181,10 @@ export class MortgageOffsetsView extends Base {
   override render(): unknown {
     if (typeof HTMLElement === 'undefined') return html``;
     const ordered = [...this.grid].reverse();
+    const PAGE = 12;
+    const pages = Math.max(1, Math.ceil(ordered.length / PAGE));
+    const page = Math.min(this.page, pages - 1);
+    const slice = ordered.slice(page * PAGE, page * PAGE + PAGE);
     const latest: any = ordered.length ? ordered[0] : null;
     const mainAcct = this.accounts.find((a: any) => a.account_key === '0390');
     const mainBal =
@@ -241,7 +257,7 @@ export class MortgageOffsetsView extends Base {
                           </tr>
                         </thead>
                         <tbody>
-                          ${ordered.map(
+                          ${slice.map(
                             (g: any) =>
                               html`<tr>
                                 <td>${g.entry_date}</td>
@@ -259,6 +275,37 @@ export class MortgageOffsetsView extends Base {
                           )}
                         </tbody>
                       </table>
+                      ${
+                        pages > 1
+                          ? html`
+                              <div class="pager">
+                                <button
+                                  class="btn btn-secondary"
+                                  ?disabled=${page === 0}
+                                  @click=${() => {
+                                    this.page = page - 1;
+                                    (this as any).requestUpdate?.();
+                                  }}
+                                >
+                                  ‹ Prev
+                                </button>
+                                <span class="muted">
+                                  Page ${page + 1} of ${pages}
+                                </span>
+                                <button
+                                  class="btn btn-secondary"
+                                  ?disabled=${page >= pages - 1}
+                                  @click=${() => {
+                                    this.page = page + 1;
+                                    (this as any).requestUpdate?.();
+                                  }}
+                                >
+                                  Next ›
+                                </button>
+                              </div>
+                            `
+                          : ''
+                      }
                     </div>
                   </div>`
                 : html`<p class="empty">
