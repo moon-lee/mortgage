@@ -269,6 +269,13 @@ export class MortgageOverviewView extends Base {
               line-height: 1.4;
               cursor: pointer;
             }
+            .pager {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 12px;
+              margin-top: 12px;
+            }
             .flex-select {
               width: auto;
               max-width: 160px;
@@ -312,6 +319,8 @@ export class MortgageOverviewView extends Base {
 
   showPaceHistory = false;
   showHistory = false;
+  historyPage = 0;
+  pacePage = 0;
   editingLoan = false;
   editingTargets = false;
   cardOrder: OverviewCardId[] = [...CANONICAL_CARD_ORDER];
@@ -512,6 +521,15 @@ export class MortgageOverviewView extends Base {
       simValid && mr.rate != null
         ? minRepayment(mr.principal, simNum / 100, mr.monthsLeft)
         : null;
+    const PAGE = 12;
+    const histRows = [...(this.history || [])].reverse();
+    const histPages = Math.max(1, Math.ceil(histRows.length / PAGE));
+    const histPage = Math.min(this.historyPage, histPages - 1);
+    const histSlice = histRows.slice(histPage * PAGE, histPage * PAGE + PAGE);
+    const paceRows = [...(this.paceHistory || [])].reverse();
+    const pacePages = Math.max(1, Math.ceil(paceRows.length / PAGE));
+    const pacePage = Math.min(this.pacePage, pacePages - 1);
+    const paceSlice = paceRows.slice(pacePage * PAGE, pacePage * PAGE + PAGE);
 
     return html`
       <div class="view-scroll">
@@ -800,13 +818,19 @@ export class MortgageOverviewView extends Base {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      ${[...this.history].reverse().map(
+                                      ${histSlice.map(
                                         (h: any, i: number) => html`
-                                          <tr class=${i === 0 ? 'latest' : ''}>
+                                          <tr
+                                            class=${
+                                              histPage === 0 && i === 0
+                                                ? 'latest'
+                                                : ''
+                                            }
+                                          >
                                             <td>
                                               ${h.entry_date}
                                               ${
-                                                i === 0
+                                                histPage === 0 && i === 0
                                                   ? html`
                                                       <span class="latest-tag"
                                                         >latest</span
@@ -849,6 +873,40 @@ export class MortgageOverviewView extends Base {
                                       )}
                                     </tbody>
                                   </table>
+                                  ${
+                                    histPages > 1
+                                      ? html`
+                                          <div class="pager">
+                                            <button
+                                              class="btn btn-secondary"
+                                              ?disabled=${histPage === 0}
+                                              @click=${() => {
+                                                this.historyPage = histPage - 1;
+                                                (this as any).requestUpdate?.();
+                                              }}
+                                            >
+                                              ‹ Prev
+                                            </button>
+                                            <span class="muted">
+                                              Page ${histPage + 1} of
+                                              ${histPages}
+                                            </span>
+                                            <button
+                                              class="btn btn-secondary"
+                                              ?disabled=${
+                                                histPage >= histPages - 1
+                                              }
+                                              @click=${() => {
+                                                this.historyPage = histPage + 1;
+                                                (this as any).requestUpdate?.();
+                                              }}
+                                            >
+                                              Next ›
+                                            </button>
+                                          </div>
+                                        `
+                                      : ''
+                                  }
                                 </div>
                               `
                             : ''
@@ -1242,13 +1300,19 @@ export class MortgageOverviewView extends Base {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      ${[...this.paceHistory].reverse().map(
+                                      ${paceSlice.map(
                                         (p: any, i: number) => html`
-                                          <tr class=${i === 0 ? 'latest' : ''}>
+                                          <tr
+                                            class=${
+                                              pacePage === 0 && i === 0
+                                                ? 'latest'
+                                                : ''
+                                            }
+                                          >
                                             <td>
                                               ${p.entry_date}
                                               ${
-                                                i === 0
+                                                pacePage === 0 && i === 0
                                                   ? html`
                                                       <span class="latest-tag"
                                                         >latest</span
@@ -1294,6 +1358,40 @@ export class MortgageOverviewView extends Base {
                                       )}
                                     </tbody>
                                   </table>
+                                  ${
+                                    pacePages > 1
+                                      ? html`
+                                          <div class="pager">
+                                            <button
+                                              class="btn btn-secondary"
+                                              ?disabled=${pacePage === 0}
+                                              @click=${() => {
+                                                this.pacePage = pacePage - 1;
+                                                (this as any).requestUpdate?.();
+                                              }}
+                                            >
+                                              ‹ Prev
+                                            </button>
+                                            <span class="muted">
+                                              Page ${pacePage + 1} of
+                                              ${pacePages}
+                                            </span>
+                                            <button
+                                              class="btn btn-secondary"
+                                              ?disabled=${
+                                                pacePage >= pacePages - 1
+                                              }
+                                              @click=${() => {
+                                                this.pacePage = pacePage + 1;
+                                                (this as any).requestUpdate?.();
+                                              }}
+                                            >
+                                              Next ›
+                                            </button>
+                                          </div>
+                                        `
+                                      : ''
+                                  }
                                 </div>
                               `
                             : ''
