@@ -101,6 +101,7 @@ export class MortgageLedgerView extends Base {
       : [];
   finance: any = null;
   rows: any[] = [];
+  allFys: string[] = [];
   fy = '';
   error = '';
 
@@ -113,7 +114,11 @@ export class MortgageLedgerView extends Base {
     if (!this.finance) return;
     try {
       this.error = '';
-      this.rows = await listRepayments(this.finance, this.fy || undefined);
+      const all = await listRepayments(this.finance);
+      this.allFys = [...new Set(all.map((r: any) => r.finance_year))].sort();
+      this.rows = this.fy
+        ? all.filter((r: any) => r.finance_year === this.fy)
+        : all;
     } catch (e: any) {
       this.error = String(e?.message || e);
     }
@@ -135,6 +140,7 @@ export class MortgageLedgerView extends Base {
           <div class="spacer"></div>
           <select
             class="filter-btn"
+            .value=${this.fy}
             @change=${(e: any) => {
               this.fy = (e.target as HTMLSelectElement).value;
               this.emit('fy-changed', { fy: this.fy });
@@ -142,7 +148,7 @@ export class MortgageLedgerView extends Base {
             }}
           >
             <option value="">All FYs</option>
-            ${[...new Set(this.rows.map((r: any) => r.finance_year))].map((f: string) => html`<option value=${f} ?selected=${this.fy === f}>${f}</option>`)}
+            ${this.allFys.map((f: string) => html`<option value=${f} ?selected=${this.fy === f}>${f}</option>`)}
           </select>
           <button
             class="filter-btn"
