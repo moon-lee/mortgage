@@ -1,13 +1,13 @@
 {
   "name": "mortgage",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "private": true,
   "type": "module",
   "main": "src/main.ts",
   "financeExtension": {
     "id": "mortgage",
     "displayName": "Mortgage",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Mortgage extension",
     "themeColor": "#2196F3",
     "activationEvents": [
@@ -42,9 +42,19 @@
         {
           "id": "mortgage.show-accounts",
           "title": "Mortgage: Offset Accounts"
+        },
+        {
+          "id": "mortgage.refresh",
+          "title": "Refresh Mortgage"
         }
       ],
       "navigation": [
+        {
+          "id": "mortgage-refresh",
+          "label": "Refresh",
+          "command": "mortgage.refresh",
+          "group": "Quick Links"
+        },
         {
           "id": "mortgage-overview",
           "label": "Overview",
@@ -92,7 +102,8 @@
         "mortgage.show-ledger",
         "mortgage.show-offsets",
         "mortgage.show-rates",
-        "mortgage.show-accounts"
+        "mortgage.show-accounts",
+        "mortgage.refresh"
       ],
       "allowedUiEvents": [
         "monthend-add-request",
