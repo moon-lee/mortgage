@@ -536,18 +536,14 @@ export class MortgageOverviewView extends Base {
         <div class="topbar">
           <span class="crumb-current">Mortgage · Overview</span>
           <div class="spacer"></div>
-          <button class="filter-btn" @click=${() => this.emit('reorder-cards')}>
-            ⇅ Cards
-          </button>
+          <button class="filter-btn" @click=${() => this.emit('reorder-cards')}>⇅ Reorder Cards</button>
           <button
             class="filter-btn"
             @click=${() =>
               this.emit('monthend-add-request', {
                 source: 'mortgage-overview',
               })}
-          >
-            Add month-end entry
-          </button>
+          >+ Add Month-End Entry</button>
         </div>
 
         <div class="view-container">

@@ -138,9 +138,11 @@ export class MortgageLedgerView extends Base {
         <div class="topbar">
           <span class="crumb-current">Mortgage · Repayment Ledger</span>
           <div class="spacer"></div>
-          <select
-            class="filter-btn"
-            .value=${this.fy}
+<label class="fy-label" for="fy-select">Finance year</label>
+             <select
+               id="fy-select"
+               class="fy-select"
+               .value=${this.fy}
             @change=${(e: any) => {
               this.fy = (e.target as HTMLSelectElement).value;
               this.emit('fy-changed', { fy: this.fy });
@@ -153,9 +155,7 @@ export class MortgageLedgerView extends Base {
           <button
             class="filter-btn"
             @click=${() => this.emit('monthend-add-request', { source: 'mortgage-ledger' })}
-          >
-            Add month-end entry
-          </button>
+          >+ Add Month-End Entry</button>
         </div>
         <div class="view-container">
           <div class="view-container-inner">

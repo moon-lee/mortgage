@@ -112,9 +112,7 @@ export class MortgageAccountsView extends Base {
               this.editing = { mode: 'add' };
               (this as any).requestUpdate?.();
             }}
-          >
-            Add account
-          </button>
+          >+ Add Account</button>
         </div>
         <div class="view-container">
           <div class="view-container-inner">

@@ -112,9 +112,7 @@ export class MortgageRateHistoryView extends Base {
               (this as any).requestUpdate?.();
               this.emit('rate-add-request');
             }}
-          >
-            Add new rate
-          </button>
+          >+ Add New Rate</button>
         </div>
         <div class="view-container">
           <div class="view-container-inner">
