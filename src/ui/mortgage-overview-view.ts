@@ -26,6 +26,8 @@ const Base =
     ? LitElement
     : (class {} as unknown as typeof LitElement);
 
+type Collapsible = 'snapshot' | 'repayment' | 'targets' | 'yearly';
+
 export class MortgageOverviewView extends Base {
   static override styles =
     typeof HTMLElement !== 'undefined'
@@ -302,9 +304,55 @@ export class MortgageOverviewView extends Base {
               color: var(--ff-text-muted, #858585);
               font-size: var(--ff-font-base);
             }
-          `,
+          
+  /* ===== Collapsible overview sections (mirrors wealthflow) =====
+     The whole header bar is the click target, and the title inside it is a real
+     button so the control is reachable by keyboard and announces its own state. */
+  .section-header.is-toggle { cursor: pointer; user-select: none; }
+  .section-header.is-toggle:hover {
+    background: color-mix(in srgb, var(--ff-text, #d4d4d4) 6%, transparent);
+  }
+  .section-toggle {
+    display: flex; align-items: center; gap: 8px; min-width: 0;
+    background: none; border: none; padding: 0; color: inherit;
+    font: inherit; font-size: 1.17em; font-weight: 700;
+    text-align: left; cursor: inherit;
+  }
+  .section-toggle:focus-visible {
+    outline: 2px solid var(--ff-accent, #007acc);
+    outline-offset: 2px; border-radius: 2px;
+  }
+  .section-toggle .section-title {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  /* Chevron drawn from borders so it inherits the title colour: points right
+     when folded, down when open. */
+  .section-toggle .chevron {
+    width: 0; height: 0; flex: none;
+    border-left: 5px solid currentColor;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    color: var(--ff-text-muted, #858585);
+    opacity: 0.6; transform: rotate(0deg);
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+  .section-toggle[aria-expanded='true'] .chevron { transform: rotate(90deg); }
+  .section-header.is-toggle:hover .chevron { opacity: 1; }
+  /* Collapsing sets the hidden attribute; state it here too so a later display
+     rule cannot silently turn every collapsed section back on. */
+  .cols[hidden],
+  .section-body[hidden] { display: none; }
+`,
         ] as any)
       : [];
+
+  /** Which overview sections are folded away, per section so one stays open. */
+  collapsed: Record<Collapsible, boolean> = {
+    snapshot: false,
+    repayment: false,
+    targets: false,
+    yearly: false,
+  };
 
   finance: any = null;
   loan: any = null;
@@ -706,8 +754,11 @@ export class MortgageOverviewView extends Base {
 
             <!-- Daily interest snapshot -->
             <div class="section" style="order:${this.cardIndex('snapshot')}">
-              <div class="section-header">
-                <h3 class="section-title">Daily interest snapshot</h3>
+              <div
+                class="section-header is-toggle"
+                @click=${() => { this.toggleSection('snapshot'); (this as any).requestUpdate?.(); }}
+              >
+                ${this.sectionToggle('snapshot', 'Daily interest snapshot', this.collapsed['snapshot'] !== true)}
                 <div class="header-actions snapshot-actions">
                   ${
                     snap.rate != null
@@ -730,7 +781,7 @@ export class MortgageOverviewView extends Base {
                 </div>
               </div>
 
-              <div class="section-body">
+              <div id="body-snapshot" class="section-body" ?hidden=${this.collapsed['snapshot'] === true}>
                 ${
                   snap.entry_date
                     ? html`
@@ -919,8 +970,11 @@ export class MortgageOverviewView extends Base {
 
             <!-- Minimum repayment -->
             <div class="section" style="order:${this.cardIndex('repayment')}">
-              <div class="section-header">
-                <h3 class="section-title">Minimum repayment</h3>
+              <div
+                class="section-header is-toggle"
+                @click=${() => { this.toggleSection('repayment'); (this as any).requestUpdate?.(); }}
+              >
+                ${this.sectionToggle('repayment', 'Minimum repayment', this.collapsed['repayment'] !== true)}
                 <div class="header-actions repayment-actions">
                   ${
                     mr.rate != null
@@ -935,7 +989,7 @@ export class MortgageOverviewView extends Base {
                 </div>
               </div>
 
-              <div class="section-body">
+              <div id="body-repayment" class="section-body" ?hidden=${this.collapsed['repayment'] === true}>
                 ${
                   mr.rate == null
                     ? html`
@@ -1063,8 +1117,11 @@ export class MortgageOverviewView extends Base {
 
             <!-- Savings targets -->
             <div class="section" style="order:${this.cardIndex('targets')}">
-              <div class="section-header">
-                <h3 class="section-title">Savings targets</h3>
+              <div
+                class="section-header is-toggle"
+                @click=${() => { this.toggleSection('targets'); (this as any).requestUpdate?.(); }}
+              >
+                ${this.sectionToggle('targets', 'Savings targets', this.collapsed['targets'] !== true)}
                 <div class="header-actions targets-actions">
                   <button
                     class="btn btn-secondary"
@@ -1091,7 +1148,7 @@ export class MortgageOverviewView extends Base {
                 </div>
               </div>
 
-              <div class="section-body">
+              <div id="body-targets" class="section-body" ?hidden=${this.collapsed['targets'] === true}>
                 ${
                   this.editingTargets
                     ? html`
@@ -1399,10 +1456,13 @@ export class MortgageOverviewView extends Base {
 
             <!-- Yearly repayment summary -->
             <div class="section" style="order:${this.cardIndex('yearly')}">
-              <div class="section-header">
-                <h3 class="section-title">Yearly Repayment Summary</h3>
+              <div
+                class="section-header is-toggle"
+                @click=${() => { this.toggleSection('yearly'); (this as any).requestUpdate?.(); }}
+              >
+                ${this.sectionToggle('yearly', 'Yearly Repayment Summary', this.collapsed['yearly'] !== true)}
               </div>
-              <div class="section-body">
+              <div id="body-yearly" class="section-body" ?hidden=${this.collapsed['yearly'] === true}>
                 <div class="table-wrap">
                   <table class="hist-table">
                     <colgroup>
@@ -1456,6 +1516,32 @@ export class MortgageOverviewView extends Base {
           </div>
         </div>
       </div>
+      `;
+  }
+
+  /** Folds a section. */
+  private toggleSection(which: Collapsible): void {
+    this.collapsed[which] = this.collapsed[which] !== true;
+  }
+
+  /** The header control: a real button, so the section is keyboard operable. */
+  private sectionToggle(which: Collapsible, text: string, open: boolean): unknown {
+    return html`
+      <button
+        type="button"
+        class="section-toggle"
+        aria-expanded=${open ? 'true' : 'false'}
+        title=${open ? 'Hide' : 'Show'}
+        @click=${(e: Event) => {
+          // The header bar also toggles; do not fire it twice.
+          e.stopPropagation();
+          this.toggleSection(which);
+          (this as any).requestUpdate?.();
+        }}
+      >
+        <span class="chevron" aria-hidden="true"></span>
+        <span class="section-title">${text}</span>
+      </button>
     `;
   }
 }
