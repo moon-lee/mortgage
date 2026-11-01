@@ -766,7 +766,10 @@ export class MortgageOverviewView extends Base {
                 @click=${() => { this.toggleSection('snapshot'); (this as any).requestUpdate?.(); }}
               >
                 ${this.sectionToggle('snapshot', 'Daily interest snapshot', this.collapsed['snapshot'] !== true)}
-                <div class="header-actions snapshot-actions">
+                <div
+                  class="header-actions snapshot-actions"
+                  @click=${(e: Event) => e.stopPropagation()}
+                >
                   ${
                     snap.rate != null
                       ? html`
@@ -982,7 +985,10 @@ export class MortgageOverviewView extends Base {
                 @click=${() => { this.toggleSection('repayment'); (this as any).requestUpdate?.(); }}
               >
                 ${this.sectionToggle('repayment', 'Minimum repayment', this.collapsed['repayment'] !== true)}
-                <div class="header-actions repayment-actions">
+                <div
+                  class="header-actions repayment-actions"
+                  @click=${(e: Event) => e.stopPropagation()}
+                >
                   ${
                     mr.rate != null
                       ? html`
@@ -1129,7 +1135,10 @@ export class MortgageOverviewView extends Base {
                 @click=${() => { this.toggleSection('targets'); (this as any).requestUpdate?.(); }}
               >
                 ${this.sectionToggle('targets', 'Savings targets', this.collapsed['targets'] !== true)}
-                <div class="header-actions targets-actions">
+                <div
+                  class="header-actions targets-actions"
+                  @click=${(e: Event) => e.stopPropagation()}
+                >
                   <button
                     class="btn btn-secondary"
                     @click=${() => {
