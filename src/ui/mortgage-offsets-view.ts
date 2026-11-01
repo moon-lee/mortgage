@@ -93,11 +93,18 @@ export class MortgageOffsetsView extends Base {
               }
             }
             .stat {
-              background: var(--ff-bg-subpanel, #2a2a2a);
+              background: var(--ff-bg-input, #3c3c3c);
               border: 1px solid var(--ff-border, #3e3e3e);
-              border-radius: 6px;
-              padding: 12px 14px;
+              border-radius: var(--ff-radius-xl, 8px);
+              padding: 12px 16px;
               min-width: 0;
+              transition:
+                background-color 120ms ease,
+                border-color 120ms ease;
+            }
+            .stat:hover {
+              background: var(--ff-bg-input-hover, #4a4a4a);
+              border-color: var(--ff-accent, #007acc);
             }
             .stat-label {
               font-size: var(--ff-font-sm);
